@@ -6,17 +6,17 @@
 int main(void) {
   RCGCGPIO |= 0x1100;    // Enable port N and J
 
-  GPIODIR_N = 0x3;      // Set PN0 (LED D2) and PN1 (LED D1) as outputs
-  GPIODEN_N = 0x3;      // Set PN0 and PN1 to digital ports
-  GPIODATA_N = 0x0;     // Set PN0 and PN1 to 1 (off)
+  GPIODIR_N |= 0x3;      // Set PN0 (LED D2) and PN1 (LED D1) as outputs
+  GPIODEN_N |= 0x3;      // Set PN0 and PN1 to digital ports
+  GPIODATA_N &= ~0x3;     // Set PN0 and PN1 to 0 (off)
   
-  GPIODIR_J = 0x0;      // Set PJ0 (SW1) and PJ1 (SW2) as inputs
-  GPIODEN_J = 0x3;      // Set PJ0 and PJ1 to digital ports
+  GPIODIR_J &= ~0x3;      // Set PJ0 (SW1) and PJ1 (SW2) as inputs
+  GPIODEN_J |= 0x3;      // Set PJ0 and PJ1 to digital ports
 
   GPIOLOCK_J = UNLOCK;  // Unlock the GPIOCR register
-  GPIOCR_J = 0x1;       // Enable writing to GPIOPUR
-  GPIOPUR_J = 0x3;      // Enable PJ0 and PJ1's weak pull-up resistor
-  GPIOCR_J = 0x0;       // Disable writing
+  GPIOCR_J |= 0x1;       // Enable writing to GPIOPUR
+  GPIOPUR_J |= 0x3;      // Enable PJ0 and PJ1's weak pull-up resistor
+  GPIOCR_J &= ~0x1;       // Disable writing
   GPIOLOCK_J = LOCK;    // Lock the GPIOCR register
   
   // Define switch values
