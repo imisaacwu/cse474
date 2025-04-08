@@ -13,8 +13,8 @@ int main(void) {
   GPIODIR_N |= 0x3;      // Set PN0 (LED D2) and PN1 (LED D1) as outputs
   GPIODEN_N |= 0x3;      // Set PN0 and PN1 to digital ports
 
-  GPIODATA_F &= ~0x11;    // Set PF0 and PF4 to 1 (off)
-  GPIODATA_N &= ~0x3;     // Set PN0 and PN1 to 1 (off)
+  GPIODATA_F &= ~0x11;    // Set PF0 and PF4 to 0 (off)
+  GPIODATA_N &= ~0x3;     // Set PN0 and PN1 to 0 (off)
 
   // Periodic pattern
   while (1) {
