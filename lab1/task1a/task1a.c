@@ -5,7 +5,10 @@
 void delay();
 
 int main(void) {
+  voltaile unsigned short delay = 0;
   RCGCGPIO |= 0x1020;   // Enable ports N and F
+  delay++;
+  delay++;
 
   GPIODIR_F |= 0x11;     // Set PF0 (LED D4) and PF4 (LED D3) as outputs
   GPIODEN_F |= 0x11;     // Set PF0 and PF4 to digital ports
