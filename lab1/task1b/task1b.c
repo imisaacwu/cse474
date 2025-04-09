@@ -4,7 +4,10 @@
 #include "../lab1.h"
 
 int main(void) {
+  voltaile unsigned short delay = 0;
   RCGCGPIO |= 0x1100;    // Enable port N and J
+  delay++;
+  delay++;
 
   GPIODIR_N |= 0x3;      // Set PN0 (LED D2) and PN1 (LED D1) as outputs
   GPIODEN_N |= 0x3;      // Set PN0 and PN1 to digital ports
