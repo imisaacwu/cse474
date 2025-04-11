@@ -5,7 +5,7 @@
 void delay();
 
 int main(void) {
-  voltaile unsigned short delay = 0;
+  volatile unsigned short delay = 0;
   RCGCGPIO |= 0x1020;   // Enable ports N and F
   delay++;
   delay++;
