@@ -2,35 +2,47 @@
 #include <stdint.h>
 
 #include "../lab1.h"
+#include "LED.c"
+
+void delay();
 
 int main(void) {
-  volatile unsigned short delay = 0;
-  RCGCGPIO |= 0x104;                                                            
-  delay++;
-  delay++;
+  volatile unsigned short port_delay = 0;
+  RCGCGPIO |= 0x4;        // Enable port C
+  port_delay++;
+  port_delay++;
   
-  GPIOAMSEL_C &= ~0x10;   // Disable analog function of PC4
-  GPIODIR_C |= 0x10;      // Set PC4 to output
-  GPIOAFSEL_C &= ~0x10;   // Set PC4 regular port function
-  GPIODEN_C |= 0x10;      // Enable digital output on PC4
+  GPIOAMSEL_C &= ~0x70;   // Disable analog function of PC4-6
+  GPIODIR_C |= 0x70;      // Set PC4-6 to output
+  GPIOAFSEL_C &= ~0x70;   // Set PC4-6 regular port function
+  GPIODEN_C |= 0x70;      // Enable digital output on PC4-6
   
-  GPIODIR_J &= ~0x3;      // Set PJ0 (SW1) and PJ1 (SW2) as inputs
-  GPIODEN_J |= 0x3;      // Set PJ0 and PJ1 to digital ports
-
-  GPIOLOCK_J = UNLOCK;  // Unlock the GPIOCR register
-  GPIOCR_J |= 0x1;       // Enable writing to GPIOPUR
-  GPIOPUR_J |= 0x3;      // Enable PJ0 and PJ1's weak pull-up resistor
-  GPIOCR_J &= ~0x1;       // Disable writing
-  GPIOLOCK_J = LOCK;    // Lock the GPIOCR register
+  struct LED grn = {&GPIODATA_C, 4};
+  struct LED ylw = {&GPIODATA_C, 5};
+  struct LED red = {&GPIODATA_C, 6};
   
-  // Define switch values
-  volatile unsigned short sw1;
-  
+  off(grn);
+  off(ylw);
+  off(red);
+ 
   while (1) {
-    sw1 = (GPIODATA_J & 0x1) == 0;
+    on(red);
+    delay();
     
-    GPIODATA_C = (GPIODATA_C & ~0x10) | (sw1 << 4);
+    off(red);
+    on(grn);
+    delay();
+    
+    off(grn);
+    on(ylw);
+    delay();
+    
+    off(ylw);
   }
   
   return 0;
+}
+
+void delay() {
+  for (int i = 0; i < 1000000; i++) {}
 }
