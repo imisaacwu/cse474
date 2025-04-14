@@ -12,6 +12,12 @@
 #define GPIODEN_C   (*((volatile uint32_t *) 0x4005A51C))
 #define GPIODIR_C   (*((volatile uint32_t *) 0x4005A400))
 
+#define GPIOAFSEL_E (*((volatile uint32_t *) 0x4005C420))
+#define GPIOAMSEL_E (*((volatile uint32_t *) 0x4005C528))
+#define GPIODATA_E  (*((volatile uint32_t *) 0x4005C3FC))
+#define GPIODEN_E   (*((volatile uint32_t *) 0x4005C51C))
+#define GPIODIR_E   (*((volatile uint32_t *) 0x4005C400))
+
 #define GPIODATA_F  (*((volatile uint32_t *) 0x4005D3FC))
 #define GPIODEN_F   (*((volatile uint32_t *) 0x4005D51C))
 #define GPIODIR_F   (*((volatile uint32_t *) 0x4005D400))
