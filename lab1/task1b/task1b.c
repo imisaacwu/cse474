@@ -2,7 +2,9 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * Apr. 7, 2025
- * Main program for Task 1b
+ * Task 1b controls the LED D1 and LED D2 whenever
+ * the user switch SW1 is pressed (turning on D1) and when
+ * the user switch SW2 is presssd (turning on D2)
  */
 
 #include <stdint.h>

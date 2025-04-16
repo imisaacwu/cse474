@@ -2,16 +2,14 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * Apr. 14, 2025
- * Main program for Task 2
+ * Task 2 represents a traffic light system where the system will start
+ * on the red light when the system is on. Users can press the pedestrian
+ * during a green light to change the light from yellow to red.
  */
 
 #include <stdint.h>
 #include "../lab1.h"
 #include "LED.h"
-
-// Task 2 represents a traffic light system where the system will start
-// on the red light when the system is on. Users can press the pedestrian
-// during a green light to change the light from yellow to red.
 
 // Adds a delay of ~0.3 seconds
 void delay();
