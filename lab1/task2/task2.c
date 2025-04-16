@@ -1,3 +1,10 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * Apr. 14, 2025
+ * Main program for Task 2
+ */
+
 #include <stdint.h>
 #include "../lab1.h"
 #include "LED.h"
@@ -9,13 +16,14 @@
 // Adds a delay of ~0.3 seconds
 void delay();
 
-// Updates the traffic light state based on the given inputs
-// 
-// @param pwr the state of the power button input
-// @param ped the state of the pedestrian button input
-// @param grn the green LED output
-// @param ylw the yellow LED output
-// @param red the red LED output
+/** Updates the traffic light state based on the given inputs
+ *
+ * @param pwr the state of the power button input
+ * @param ped the state of the pedestrian button input
+ * @param grn the green LED output
+ * @param ylw the yellow LED output
+ * @param red the red LED output
+ */
 void tick_traffic(volatile unsigned short pwr, volatile unsigned short ped,
                   struct LED grn, struct LED ylw, struct LED red);
 

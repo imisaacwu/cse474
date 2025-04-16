@@ -1,26 +1,32 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * Apr. 7, 2025
+ * Main program for Task 1b
+ */
+
 #include <stdint.h>
-#include <stdio.h>
 
 #include "../lab1.h"
 
 int main(void) {
   volatile unsigned short delay = 0;
-  RCGCGPIO |= 0x1100;    // Enable port N and J
+  RCGCGPIO |= 0x1100;       // Enable port N and J
   delay++;
   delay++;
 
-  GPIODIR_N |= 0x3;      // Set PN0 (LED D2) and PN1 (LED D1) as outputs
-  GPIODEN_N |= 0x3;      // Set PN0 and PN1 to digital ports
-  GPIODATA_N &= ~0x3;     // Set PN0 and PN1 to 0 (off)
+  GPIODIR_N |= 0x3;         // Set PN0 (LED D2) and PN1 (LED D1) as outputs
+  GPIODEN_N |= 0x3;         // Set PN0 and PN1 to digital ports
+  GPIODATA_N &= ~0x3;       // Set PN0 and PN1 to 0 (off)
   
-  GPIODIR_J &= ~0x3;      // Set PJ0 (SW1) and PJ1 (SW2) as inputs
-  GPIODEN_J |= 0x3;      // Set PJ0 and PJ1 to digital ports
+  GPIODIR_J &= ~0x3;        // Set PJ0 (SW1) and PJ1 (SW2) as inputs
+  GPIODEN_J |= 0x3;         // Set PJ0 and PJ1 to digital ports
 
-  GPIOLOCK_J = UNLOCK;  // Unlock the GPIOCR register
-  GPIOCR_J |= 0x1;       // Enable writing to GPIOPUR
-  GPIOPUR_J |= 0x3;      // Enable PJ0 and PJ1's weak pull-up resistor
-  GPIOCR_J &= ~0x1;       // Disable writing
-  GPIOLOCK_J = LOCK;    // Lock the GPIOCR register
+  GPIOLOCK_J = UNLOCK;      // Unlock the GPIOCR register
+  GPIOCR_J |= 0x1;          // Enable writing to GPIOPUR
+  GPIOPUR_J |= 0x3;         // Enable PJ0 and PJ1's weak pull-up resistor
+  GPIOCR_J &= ~0x1;         // Disable writing
+  GPIOLOCK_J = LOCK;        // Lock the GPIOCR register
   
   // Define switch values
   volatile unsigned short sw1;

@@ -1,23 +1,31 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * Apr. 7, 2025
+ * Main program for Task 1a
+ */
+
 #include <stdint.h>
 
 #include "../lab1.h"
 
+// Delays execution for an arbitrary length of time
 void delay();
 
 int main(void) {
   volatile unsigned short delay = 0;
-  RCGCGPIO |= 0x1020;   // Enable ports N and F
+  RCGCGPIO |= 0x1020;       // Enable ports N and F
   delay++;
   delay++;
 
-  GPIODIR_F |= 0x11;     // Set PF0 (LED D4) and PF4 (LED D3) as outputs
-  GPIODEN_F |= 0x11;     // Set PF0 and PF4 to digital ports
+  GPIODIR_F |= 0x11;        // Set PF0 (LED D4) and PF4 (LED D3) as outputs
+  GPIODEN_F |= 0x11;        // Set PF0 and PF4 to digital ports
 
-  GPIODIR_N |= 0x3;      // Set PN0 (LED D2) and PN1 (LED D1) as outputs
-  GPIODEN_N |= 0x3;      // Set PN0 and PN1 to digital ports
+  GPIODIR_N |= 0x3;         // Set PN0 (LED D2) and PN1 (LED D1) as outputs
+  GPIODEN_N |= 0x3;         // Set PN0 and PN1 to digital ports
 
-  GPIODATA_F &= ~0x11;    // Set PF0 and PF4 to 0 (off)
-  GPIODATA_N &= ~0x3;     // Set PN0 and PN1 to 0 (off)
+  GPIODATA_F &= ~0x11;      // Set PF0 and PF4 to 0 (off)
+  GPIODATA_N &= ~0x3;       // Set PN0 and PN1 to 0 (off)
 
   // Periodic pattern
   while (1) {

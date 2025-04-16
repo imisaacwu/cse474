@@ -1,3 +1,10 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * Apr. 14, 2025
+ * Implementations for LED functions
+ */
+
 #include "LED.h"
 
 void on(struct LED led) {
