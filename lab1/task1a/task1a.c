@@ -2,8 +2,7 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * Apr. 7, 2025
- * Task 1a controls the LEDs on the TIVA board such that
- * LEDs D1-D4 turn on and off in a sequential manner.
+ * TESTING TESTING
  */
 
 #include <stdint.h>
