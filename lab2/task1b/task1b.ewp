@@ -352,7 +352,7 @@
                 </option>
                 <option>
                     <name>CCOptLevel</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCOptStrategy</name>
@@ -361,7 +361,7 @@
                 </option>
                 <option>
                     <name>CCOptLevelSlave</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CompilerMisraRules98</name>
@@ -691,7 +691,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>task1a.out</state>
+                    <state>task1b.out</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -2030,6 +2030,12 @@
         </settings>
     </configuration>
     <file>
-        <name>$PROJ_DIR$\task1a.c</name>
+        <name>$PROJ_DIR$\LED.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\LED.h</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\task1b.c</name>
     </file>
 </project>
