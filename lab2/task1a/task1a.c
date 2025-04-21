@@ -39,12 +39,15 @@ int main(void) {
 
   // Periodic pattern
   while(1) {
+    // Polls TATORIS bit for ~1 sec
     do {
+      // Check TATORIS bit to see if timer has counted down yet
       TATORIS = (GPTMRIS_0 & 0x1);
     } while (TATORIS == 0x0);
-
-    GPTMICR_0 |= 0x1;
-    GPIODATA_N ^= 0x2;
+    
+    // post: TATORIS == 0x1
+    GPTMICR_0 |= 0x1;       // Clear the TATORIS bit
+    GPIODATA_N ^= 0x2;      // Flip LED D1
     
     do {
       TATORIS = (GPTMRIS_0 & 0x1);
