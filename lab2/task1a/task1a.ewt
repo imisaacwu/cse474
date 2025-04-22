@@ -2316,4 +2316,10 @@
     <file>
         <name>$PROJ_DIR$\task1a.c</name>
     </file>
+    <file>
+        <name>$PROJ_DIR$\..\timer.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\timer.h</name>
+    </file>
 </project>
