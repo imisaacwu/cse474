@@ -14,7 +14,6 @@
  int main(void) {
   volatile unsigned short tick = 0;
   RCGCGPIO |= 0x1020;       // Enable ports N and F
-  RCGCTIMER |= 0x1;         // Enable Timer 0
   tick++;
   tick++;
 
@@ -28,19 +27,10 @@
   GPIODATA_N &= ~0x3;       // Set PN0 and PN1 to 0 (off)
   
   struct Timer timer = {
-    &GPTMCTL_0, &GPTMCFG_0, &GPTMTAMR_0, &GPTMTAILR_0, &GPTMRIS_0, &GPTMICR_0, 0
+    &GPTMCTL_0, &GPTMCFG_0, &GPTMTAMR_0, &GPTMTAILR_0, &GPTMRIS_0, &GPTMICR_0
   };
-  init(timer, 0x2, 16000000);
+  init(timer, 0, 0x2, 16000000);
   enable(timer);
-  
-  //GPTMCTL_0 &= ~0x101;      // Disable Timer A/B
-  //GPTMCFG_0 = 0x00000000;   // Reset Timer 0 configs
-  //GPTMCFG_0 &= ~0x7;        // Set Timer 0 to be 32-bit
-  //GPTMTAMR_0 |= 0x3;
-  //GPTMTAMR_0 &= ~0x1;       // Set Timer A/B to Period Timer mode
-  //GPTMTAMR_0 &= ~0x10;      // Set Timer A/B to counts down
-  //GPTMTAILR_0 = 0xF42400;   // Load 16,000,000 to achieve 1Hz
-  //GPTMCTL_0 |= 0x1;         // Enable timer A
   
   volatile unsigned short TATORIS;
   
