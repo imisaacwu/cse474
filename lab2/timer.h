@@ -7,15 +7,19 @@
 #include "lab2.h"
 
 struct Timer {
-  volatile uint32_t *ctl_;
-  volatile uint32_t *cfg_;
-  volatile uint32_t *mod_;
-  volatile uint32_t *ivl_;
-  volatile uint32_t *ris_;
-  volatile uint32_t *clr_;
+  unsigned short num_;
+  unsigned short mode_;
+  uint32_t interval_;
+  
+  volatile uint32_t *ctl;
+  volatile uint32_t *cfg;
+  volatile uint32_t *tamr;
+  volatile uint32_t *tailr;
+  volatile uint32_t *ris;
+  volatile uint32_t *icr;
 };
 
-void init(struct Timer timer, unsigned short port, unsigned short mode, uint32_t interval);
+void init(struct Timer timer);
 void enable(struct Timer timer);
 void disable(struct Timer timer);
 bool isEnabled(struct Timer timer);

@@ -30,50 +30,42 @@ enum States { Off, Stop, Warn, Go } state;
 
 int main(void) {
   volatile unsigned short port_delay = 0;
-  RCGCGPIO |= 0x1014;       // Enable ports C, E
-  RCGCTIMER |= 0x7;
+  RCGCGPIO |= 0x14;             // Enable ports C, E
+  RCGCTIMER |= 0x7;             // Enable Timers 0-2
   port_delay++;
   port_delay++;
   
   // Configure Port C for LEDs
-  GPIOAMSEL_C &= ~0x70;   // Disable analog function of PC4-6
-  GPIODIR_C |= 0x70;      // Set PC4-6 to output
-  GPIOAFSEL_C &= ~0x70;   // Set PC4-6 regular port function
-  GPIODEN_C |= 0x70;      // Enable digital output on PC4-6
+  GPIOAMSEL_C &= ~0x70;         // Disable analog function of PC4-6
+  GPIODIR_C |= 0x70;            // Set PC4-6 to output
+  GPIOAFSEL_C &= ~0x70;         // Set PC4-6 regular port function
+  GPIODEN_C |= 0x70;            // Enable digital output on PC4-6
   
   // Configure Port E for external buttons
-  GPIOAMSEL_E &= ~0x3;    // Disable analog function of PE0-1
-  GPIODIR_E &= ~0x3;      // Set PE0-1 to input
-  GPIOAFSEL_E &= ~0x3;    // Set PE0-1 regular port function
-  GPIODEN_E |= 0x3;       // Enable digital input on PE0-1
+  GPIOAMSEL_E &= ~0x3;          // Disable analog function of PE0-1
+  GPIODIR_E &= ~0x3;            // Set PE0-1 to input
+  GPIOAFSEL_E &= ~0x3;          // Set PE0-1 regular port function
+  GPIODEN_E |= 0x3;             // Enable digital input on PE0-1
   
-  GPIODIR_N |= 0x3;         // Set PN0 (LED D2) and PN1 (LED D1) as outputs
-  GPIODEN_N |= 0x3;         // Set PN0 and PN1 to digital ports
-  GPIODATA_N &= ~0x3;       // Set PN0 and PN1 to 0 (off)
+  // Configure timers
+  struct Timer timer_pwr = {
+    0, TIMER_PERIODIC, 2 * CLK_FRQ,
+    &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
+  };
   
-  GPTMCTL_0 &= ~0x101;      // Disable Timer A/B
-  GPTMCFG_0 = 0x00000000;   // Reset Timer 0 configs
-  GPTMCFG_0 &= ~0x7;        // Set Timer 0 to be 32-bit
-  GPTMTAMR_0 |= 0x3;
-  GPTMTAMR_0 &= ~0x1;       // Set Timer A/B to Period Timer mode
-  GPTMTAMR_0 &= ~0x10;      // Set Timer A/B to counts down
-  GPTMTAILR_0 = 32000000;   // Load 32,000,000 to achieve 0.5Hz
+  struct Timer timer_ped = {
+    1, TIMER_PERIODIC, 2 * CLK_FRQ,
+    &GPTMCTL(1), &GPTMCFG(1), &GPTMTAMR(1), &GPTMTAILR(1), &GPTMRIS(1), &GPTMICR(1)
+  };
   
-  GPTMCTL_1 &= ~0x101;      // Disable Timer A/B
-  GPTMCFG_1 = 0x00000000;   // Reset Timer 1 configs
-  GPTMCFG_1 &= ~0x7;        // Set Timer 1 to be 32-bit
-  GPTMTAMR_1 |= 0x3;
-  GPTMTAMR_1 &= ~0x1;       // Set Timer A/B to Period Timer mode
-  GPTMTAMR_1 &= ~0x10;      // Set Timer A/B to counts down
-  GPTMTAILR_1 = 32000000;   // Load 32,000,000 to achieve 0.5Hz
+  struct Timer timer_5sc = {
+    2, TIMER_PERIODIC, 5 * CLK_FRQ,
+    &GPTMCTL(2), &GPTMCFG(2), &GPTMTAMR(2), &GPTMTAILR(2), &GPTMRIS(2), &GPTMICR(2)
+  };
   
-  GPTMCTL_2 &= ~0x101;      // Disable Timer A/B
-  GPTMCFG_2 = 0x00000000;   // Reset Timer 2 configs
-  GPTMCFG_2 &= ~0x7;        // Set Timer 2 to be 32-bit
-  GPTMTAMR_2 |= 0x3;
-  GPTMTAMR_2 &= ~0x1;       // Set Timer A/B to Period Timer mode
-  GPTMTAMR_2 &= ~0x10;      // Set Timer A/B to counts down
-  GPTMTAILR_2 = 80000000;   // Load 80,000,000 to achieve 0.2Hz
+  init(timer_pwr);
+  init(timer_ped);
+  init(timer_5sc);
   
   // Connect configured Port C pins to LEDs
   struct LED grn = {&GPIODATA_C, 4};
@@ -88,111 +80,81 @@ int main(void) {
   
   unsigned short pwr;
   unsigned short ped;
-  
-  unsigned short TATORIS_pwr;
-  unsigned short TATORIS_ped;
-  unsigned short TATORIS_5sec;
 
   while (1) {
     // Checks if pwr is on or off
     pwr = (GPIODATA_E & 0x1) == 0x1;
     // Checks if ped is on or off
     ped = (GPIODATA_E & 0x2) == 0x2;
-    
-    // pre: pwr_timer and ped_timer is off (isDone == true)
-                  
+                      
     if (pwr) {
-      GPTMCTL_0 |= 0x1; // start timer
-      TATORIS_pwr = (GPTMRIS_0 & 0x1);
-      if (TATORIS_pwr == 0x1 && pwr) { // Power has been held for 2 seconds
+      enable(timer_pwr); // start timer
+
+      if (isDone(timer_pwr)) { // Power has been held for 2 seconds
         // Reset power timer interrupt status (start counting again)
-        GPTMICR_0 |= 0x1;
+        reset(timer_pwr);
 
         if (state == Off) {
           // System was just turned on, start 5-second timer
-          GPTMCTL_2 |= 0x1;
+          enable(timer_5sc);
         }
 
         tick_traffic(pwr, 0, grn, ylw, red);
 
         if (state == Off) {
           // System was just turned off, cancel 5-second timer
-          GPTMCTL_2 &= ~0x1;
-          GPTMCFG_2 = 0x00000000;
-          GPTMCFG_2 &= ~0x7;        // Set Timer 2 to be 32-bit
-          GPTMTAMR_2 |= 0x3;
-          GPTMTAMR_2 &= ~0x1;       // Set Timer A/B to Period Timer mode
-          GPTMTAMR_2 &= ~0x10;      // Set Timer A/B to counts down
-          GPTMTAILR_2 = 80000000;   // Load 80,000,000
+          disable(timer_5sc);
+          init(timer_5sc);      // Re-configure timer to ensure correct interval
         }
       }
-    } else {
+    } else if (isEnabled(timer_pwr)) {
       // Power button released, cancel timer
-      GPTMCTL_0 &= ~0x1;
-      GPTMCFG_0 = 0x00000000;
-      GPTMCFG_0 &= ~0x7;        // Set Timer 0 to be 32-bit
-      GPTMTAMR_0 |= 0x3;
-      GPTMTAMR_0 &= ~0x1;       // Set Timer A/B to Period Timer mode
-      GPTMTAMR_0 &= ~0x10;      // Set Timer A/B to counts down
-      GPTMTAILR_0 = 32000000;   // Load 32,000,000
+      disable(timer_pwr);
+      init(timer_pwr);          // Re-configure timer to ensure correct interval
     }
     
     if (ped) {
-      GPTMCTL_1 |= 0x1;
-      TATORIS_ped = (GPTMRIS_1 & 0x1);
-      if (TATORIS_ped == 0x1) {
+      enable(timer_ped); // start timer
+
+      if (isDone(timer_ped)) { // Pedestrian has been held for 2 seconds
         // Reset interrupt status (start counting again)
-        GPTMICR_1 |= 0x1;
+        reset(timer_ped);
+
         tick_traffic(0, ped, grn, ylw, red);
         
         if (state == Warn) {
           // Ped moved the state to Warn, reset the timer before going to Stop
-          GPTMCTL_2 &= ~0x1;
-          GPTMCFG_2 = 0x00000000;
-          GPTMCFG_2 &= ~0x7;        // Set Timer 2 to be 32-bit
-          GPTMTAMR_2 |= 0x3;
-          GPTMTAMR_2 &= ~0x1;       // Set Timer A/B to Period Timer mode
-          GPTMTAMR_2 &= ~0x10;      // Set Timer A/B to counts down
-          GPTMTAILR_2 = 80000000;   // Load 80,000,000
-          GPTMCTL_2 |= 0x1;         // Re-enable 5-second timer
+          disable(timer_5sc);
+          init(timer_5sc);      // Re-configure timer to ensure correct interval
+          enable(timer_5sc);
         }
       }
-    } else {
+    } else if (isEnabled(timer_ped)) {
       // Pedestrian button released, cancel timer
-      GPTMCTL_1 &= ~0x1;        // Disable Timer A/B
-      GPTMCFG_1 = 0x00000000;   // Reset Timer 1 configs
-      GPTMCFG_1 &= ~0x7;        // Set Timer 1 to be 32-bit
-      GPTMTAMR_1 |= 0x3;
-      GPTMTAMR_1 &= ~0x1;       // Set Timer A/B to Period Timer mode
-      GPTMTAMR_1 &= ~0x10;      // Set Timer A/B to counts down
-      GPTMTAILR_1 = 32000000;   // Load 32,000,000 to achieve 0.5Hz
+      disable(timer_ped);
+      init(timer_ped);          // Re-configure timer to ensure correct interval
     }
     
-    TATORIS_5sec = (GPTMRIS_2 & 0x1);
-    if (TATORIS_5sec == 0x1) {
+    if (isDone(timer_5sc)) {
       // 5 seconds have elapsed, tick traffic
       tick_traffic(0, 0, grn, ylw, red);
       // Reset 5-second timer
-      GPTMICR_2 |= 0x1;
+      reset(timer_5sc);
     }
-    
-    // Debug code?
-    // GPIODATA_N = (GPIODATA_N & ~0x1) | pwr;
-    // GPIODATA_N = (GPIODATA_N & ~0x2) | (ped << 1);
   }
   
   return 0;
 }
 
-// Timer is not quite consistent
 void tick_traffic(unsigned short pwr, unsigned short ped,
                   struct LED grn, struct LED ylw, struct LED red) {
+  // Transitions
   switch (state) {
-    case Stop:  // Transitions
+    case Stop:
       off(red);
       if (pwr) {
         state = Off;
-      } else if (ped) {  // Stay on red if ped was pressed at time of tick
+      } else if (ped) {
         state = Stop;
       } else {
         state = Go;
@@ -226,7 +188,8 @@ void tick_traffic(unsigned short pwr, unsigned short ped,
       break;
   }
   
-  switch (state) {  // State actions
+  // State actions
+  switch (state) {
     case Stop:
       on(red);
       break;

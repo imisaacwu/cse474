@@ -27,12 +27,11 @@
   GPIODATA_N &= ~0x3;       // Set PN0 and PN1 to 0 (off)
   
   struct Timer timer = {
-    &GPTMCTL_0, &GPTMCFG_0, &GPTMTAMR_0, &GPTMTAILR_0, &GPTMRIS_0, &GPTMICR_0
+    0, TIMER_PERIODIC, 1 * CLK_FRQ,
+    &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
   };
-  init(timer, 0, 0x2, 16000000);
+  init(timer);
   enable(timer);
-  
-  volatile unsigned short TATORIS;
   
   // Periodic pattern
   while(1) {

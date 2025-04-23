@@ -14,24 +14,6 @@
 #define RCGCGPIO    (*((volatile uint32_t *) 0x400FE608))
 #define RCGCTIMER   (*((volatile uint32_t *) 0x400FE604))
 
-// Timer Macros
-#define GPTMCTL(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x00C)))
-#define GPTMCFG(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x000)))
-#define GPTMTAMR(X)     (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x004)))
-#define GPTMTAILR(X)    (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x028)))
-#define GPTMRIS(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x01C)))
-#define GPTMICR(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x024)))
-
-// Timer Bases
-#define TIMER_0_BASE    0x40030000
-#define TIMER_1_BASE    0x40031000
-#define TIMER_2_BASE    0x40032000
-#define TIMER_3_BASE    0x40033000
-#define TIMER_4_BASE    0x40034000
-#define TIMER_5_BASE    0x40035000
-#define TIMER_6_BASE    0x400E0000
-#define TIMER_7_BASE    0x400E1000
-
 // Registers for port C: Used in Task 1b for external LEDs
 #define GPIOAFSEL_C (*((volatile uint32_t *) 0x4005A420))
 #define GPIOAMSEL_C (*((volatile uint32_t *) 0x4005A528))
@@ -56,11 +38,30 @@
 #define GPIODEN_N   (*((volatile uint32_t *) 0x4006451C))
 #define GPIODIR_N   (*((volatile uint32_t *) 0x40064400))
 
-
 // Additional Macros
 
-// Macros to unlock and lock GPIO_LOCK registers
-#define UNLOCK      0x4C4F434B
-#define LOCK        0x0
+// Timer Macros
+#define GPTMCTL(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x00C)))
+#define GPTMCFG(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x000)))
+#define GPTMTAMR(X)     (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x004)))
+#define GPTMTAILR(X)    (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x028)))
+#define GPTMRIS(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x01C)))
+#define GPTMICR(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x024)))
+
+// Timer Bases
+#define TIMER_0_BASE    0x40030000
+#define TIMER_1_BASE    0x40031000
+#define TIMER_2_BASE    0x40032000
+#define TIMER_3_BASE    0x40033000
+#define TIMER_4_BASE    0x40034000
+#define TIMER_5_BASE    0x40035000
+#define TIMER_6_BASE    0x400E0000
+#define TIMER_7_BASE    0x400E1000
+   
+// More Timer Macros
+#define CLK_FRQ         16000000
+#define TIMER_ONE_SHOT  0x1
+#define TIMER_PERIODIC  0x2
+#define TIMER_CAPTURE   0x3
 
 #endif  // LAB2_H_
