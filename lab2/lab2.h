@@ -14,29 +14,23 @@
 #define RCGCGPIO    (*((volatile uint32_t *) 0x400FE608))
 #define RCGCTIMER   (*((volatile uint32_t *) 0x400FE604))
 
-// Registers for Timer 0
-#define GPTMCTL_0   (*((volatile uint32_t *) 0x4003000C))
-#define GPTMCFG_0   (*((volatile uint32_t *) 0x40030000))
-#define GPTMTAMR_0  (*((volatile uint32_t *) 0x40030004))
-#define GPTMTAILR_0 (*((volatile uint32_t *) 0x40030028))
-#define GPTMRIS_0   (*((volatile uint32_t *) 0x4003001C))
-#define GPTMICR_0   (*((volatile uint32_t *) 0x40030024))
+// Timer Macros
+#define GPTMCTL(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x00C)))
+#define GPTMCFG(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x000)))
+#define GPTMTAMR(X)     (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x004)))
+#define GPTMTAILR(X)    (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x028)))
+#define GPTMRIS(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x01C)))
+#define GPTMICR(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x024)))
 
-// Registers for Timer 1
-#define GPTMCTL_1   (*((volatile uint32_t *) 0x4003100C))
-#define GPTMCFG_1   (*((volatile uint32_t *) 0x40031000))
-#define GPTMTAMR_1  (*((volatile uint32_t *) 0x40031004))
-#define GPTMTAILR_1 (*((volatile uint32_t *) 0x40031028))
-#define GPTMRIS_1   (*((volatile uint32_t *) 0x4003101C))
-#define GPTMICR_1   (*((volatile uint32_t *) 0x40031024))
-
-// Registers for Timer 2
-#define GPTMCTL_2   (*((volatile uint32_t *) 0x4003200C))
-#define GPTMCFG_2   (*((volatile uint32_t *) 0x40032000))
-#define GPTMTAMR_2  (*((volatile uint32_t *) 0x40032004))
-#define GPTMTAILR_2 (*((volatile uint32_t *) 0x40032028))
-#define GPTMRIS_2   (*((volatile uint32_t *) 0x4003201C))
-#define GPTMICR_2   (*((volatile uint32_t *) 0x40032024))
+// Timer Bases
+#define TIMER_0_BASE    0x40030000
+#define TIMER_1_BASE    0x40031000
+#define TIMER_2_BASE    0x40032000
+#define TIMER_3_BASE    0x40033000
+#define TIMER_4_BASE    0x40034000
+#define TIMER_5_BASE    0x40035000
+#define TIMER_6_BASE    0x400E0000
+#define TIMER_7_BASE    0x400E1000
 
 // Registers for port C: Used in Task 1b for external LEDs
 #define GPIOAFSEL_C (*((volatile uint32_t *) 0x4005A420))
