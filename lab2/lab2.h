@@ -19,7 +19,6 @@
 #define GPTMCFG_0   (*((volatile uint32_t *) 0x40030000))
 #define GPTMTAMR_0  (*((volatile uint32_t *) 0x40030004))
 #define GPTMTAILR_0 (*((volatile uint32_t *) 0x40030028))
-#define GPTMTAILR_0 (*((volatile uint32_t *) 0x40030028))
 #define GPTMRIS_0   (*((volatile uint32_t *) 0x4003001C))
 #define GPTMICR_0   (*((volatile uint32_t *) 0x40030024))
 
@@ -28,7 +27,6 @@
 #define GPTMCFG_1   (*((volatile uint32_t *) 0x40031000))
 #define GPTMTAMR_1  (*((volatile uint32_t *) 0x40031004))
 #define GPTMTAILR_1 (*((volatile uint32_t *) 0x40031028))
-#define GPTMTAILR_1 (*((volatile uint32_t *) 0x40031028))
 #define GPTMRIS_1   (*((volatile uint32_t *) 0x4003101C))
 #define GPTMICR_1   (*((volatile uint32_t *) 0x40031024))
 
@@ -36,7 +34,6 @@
 #define GPTMCTL_2   (*((volatile uint32_t *) 0x4003200C))
 #define GPTMCFG_2   (*((volatile uint32_t *) 0x40032000))
 #define GPTMTAMR_2  (*((volatile uint32_t *) 0x40032004))
-#define GPTMTAILR_2 (*((volatile uint32_t *) 0x40032028))
 #define GPTMTAILR_2 (*((volatile uint32_t *) 0x40032028))
 #define GPTMRIS_2   (*((volatile uint32_t *) 0x4003201C))
 #define GPTMICR_2   (*((volatile uint32_t *) 0x40032024))
