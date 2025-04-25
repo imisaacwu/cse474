@@ -33,12 +33,35 @@
 #define GPIODEN_F   (*((volatile uint32_t *) 0x4005D51C))
 #define GPIODIR_F   (*((volatile uint32_t *) 0x4005D400))
 
+// Registers for port J: Used in Task 2b for on-board buttons
+#define GPIOCR_J    (*((volatile uint32_t *) 0x40060524))
+#define GPIODATA_J  (*((volatile uint32_t *) 0x400603FC))
+#define GPIODEN_J   (*((volatile uint32_t *) 0x4006051C))
+#define GPIODIR_J   (*((volatile uint32_t *) 0x40060400))
+#define GPIOIBE_J   (*((volatile uint32_t *) 0x40060408))
+#define GPIOICR_J   (*((volatile uint32_t *) 0x4006041C))
+#define GPIOIEV_J   (*((volatile uint32_t *) 0x4006040C))
+#define GPIOIM_J    (*((volatile uint32_t *) 0x40060410))
+#define GPIOIS_J    (*((volatile uint32_t *) 0x40060404))
+#define GPIOLOCK_J  (*((volatile uint32_t *) 0x40060520))
+#define GPIOPUR_J   (*((volatile uint32_t *) 0x40060510))
+#define GPIORIS_J   (*((volatile uint32_t *) 0x40060414))
+
 // Registers for port N: Used in Task 1a for on-board LEDs D1 and D2
 #define GPIODATA_N  (*((volatile uint32_t *) 0x400643FC))
 #define GPIODEN_N   (*((volatile uint32_t *) 0x4006451C))
 #define GPIODIR_N   (*((volatile uint32_t *) 0x40064400))
 
+// Registers for NVIC
+#define NVIC_EN0    (*((volatile uint32_t *) 0xE000E100))
+#define NVIC_EN1    (*((volatile uint32_t *) 0xE000E104))
+#define NVIC_PRI12  (*((volatile uint32_t *) 0xE000E430))
+
 // Additional Macros
+
+// Macros to unlock and lock GPIO_LOCK registers
+#define UNLOCK      0x4C4F434B
+#define LOCK        0x0
 
 // Timer Macros
 #define GPTMCTL(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x00C)))
@@ -47,6 +70,7 @@
 #define GPTMTAILR(X)    (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x028)))
 #define GPTMRIS(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x01C)))
 #define GPTMICR(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x024)))
+#define GPTMIMR(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x018)))
 
 // Timer Bases
 #define TIMER_0_BASE    0x40030000

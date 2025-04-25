@@ -352,7 +352,7 @@
                 </option>
                 <option>
                     <name>CCOptLevel</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCOptStrategy</name>
@@ -361,7 +361,7 @@
                 </option>
                 <option>
                     <name>CCOptLevelSlave</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CompilerMisraRules98</name>
@@ -691,7 +691,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>task1b.out</state>
+                    <state>task2b.out</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -1046,11 +1046,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>Automatic choice of formatter, without multibyte support.</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>Automatic choice of formatter, without multibyte support.</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -1058,7 +1058,7 @@
                 </option>
                 <option>
                     <name>OGCoreOrChip</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>GRuntimeLibSelect</name>
@@ -1072,7 +1072,7 @@
                 </option>
                 <option>
                     <name>RTDescription</name>
-                    <state>Use the normal configuration of the C/C++ runtime library. No locale interface, C locale, no file descriptor support, no multibytes in printf and scanf, and no hex floats in strtod.</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OGProductVersion</name>
@@ -1080,7 +1080,7 @@
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
-                    <state>8.11.3.13977</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>GeneralEnableMisra</name>
@@ -1092,7 +1092,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
-                    <state>TM4C1294NCPDT	TexasInstruments TM4C1294NCPDT</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
@@ -1100,7 +1100,7 @@
                 </option>
                 <option>
                     <name>GEndianModeBE</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OGBufferedTerminalOutput</name>
@@ -1126,12 +1126,12 @@
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
-                    <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
                     <version>25</version>
-                    <state>39</state>
+                    <state>38</state>
                 </option>
                 <option>
                     <name>OGUseCmsis</name>
@@ -1148,21 +1148,21 @@
                 <option>
                     <name>CoreVariant</name>
                     <version>25</version>
-                    <state>39</state>
+                    <state>38</state>
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
-                    <state>TM4C1294NCPDT	TexasInstruments TM4C1294NCPDT</state>
+                    <state>-</state>
                 </option>
                 <option>
                     <name>FPU2</name>
                     <version>0</version>
-                    <state>4</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>NrRegs</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>NEON</name>
@@ -1171,7 +1171,7 @@
                 <option>
                     <name>GFPUCoreSlave2</name>
                     <version>25</version>
-                    <state>39</state>
+                    <state>38</state>
                 </option>
                 <option>
                     <name>OGCMSISPackSelectDevice</name>
@@ -1212,7 +1212,7 @@
                 </option>
                 <option>
                     <name>DSPExtension</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
             </data>
         </settings>
@@ -1286,7 +1286,7 @@
                 <option>
                     <name>CCAllowList</name>
                     <version>1</version>
-                    <state>00000000</state>
+                    <state>11111110</state>
                 </option>
                 <option>
                     <name>CCDebugInfo</name>
@@ -1334,7 +1334,7 @@
                 </option>
                 <option>
                     <name>OutputFile</name>
-                    <state>$FILE_BNAME$.o</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>CCLibConfigHeader</name>
@@ -1366,7 +1366,7 @@
                 </option>
                 <option>
                     <name>CCOptLevel</name>
-                    <state>1</state>
+                    <state>3</state>
                 </option>
                 <option>
                     <name>CCOptStrategy</name>
@@ -1600,7 +1600,7 @@
                 </option>
                 <option>
                     <name>AOutputFile</name>
-                    <state>$FILE_BNAME$.o</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>ALimitErrorsCheck</name>
@@ -1705,7 +1705,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>task1b.out</state>
+                    <state>###Unitialized###</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -1769,7 +1769,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\linker\TexasInstruments\TM4C1294NC.icf</state>
+                    <state>lnk0t.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -1829,7 +1829,7 @@
                 </option>
                 <option>
                     <name>IlinkProgramEntryLabel</name>
-                    <state>__iar_program_start</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>DoFill</name>
@@ -2030,13 +2030,10 @@
         </settings>
     </configuration>
     <file>
-        <name>$PROJ_DIR$\LED.c</name>
+        <name>$PROJ_DIR$\..\cstartup_M.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\LED.h</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\task1b.c</name>
+        <name>$PROJ_DIR$\task2b.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\..\timer.c</name>

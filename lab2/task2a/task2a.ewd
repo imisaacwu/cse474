@@ -1459,7 +1459,7 @@
                 </option>
                 <option>
                     <name>MemFile</name>
-                    <state>$TOOLKIT_DIR$\CONFIG\debugger\TexasInstruments\TM4C1294NCPDT.ddf</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>RunToEnable</name>
@@ -1499,11 +1499,11 @@
                 </option>
                 <option>
                     <name>OCDynDriverList</name>
-                    <state>LMIFTDI_ID</state>
+                    <state>ARMSIM_ID</state>
                 </option>
                 <option>
                     <name>OCLastSavedByProductVersion</name>
-                    <state>8.11.3.13977</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>UseFlashLoader</name>
@@ -1527,7 +1527,7 @@
                 </option>
                 <option>
                     <name>FlashLoadersV3</name>
-                    <state>$TOOLKIT_DIR$\config\flashloader\TexasInstruments\FlashTC4_NC.board</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCImagesSuppressCheck1</name>
@@ -1595,7 +1595,7 @@
                 </option>
                 <option>
                     <name>OCMulticoreNrOfCores</name>
-                    <state>1</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCMulticoreMaster</name>

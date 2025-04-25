@@ -14,6 +14,24 @@
 #include "../timer.h"
 #include "LED.h"
 
+// Configures necessary ports
+void config_ports();
+
+// Handles the power button (i.e., turning system on/off after pressed
+// for 2 seconds.
+void handle_pwr(unsigned short* pwr, struct LED grn, struct LED ylw, 
+                struct LED red, struct Timer timer_pwr, struct Timer timer_5c);
+
+// Handles the pedestrian button (i.e., switching from Go -> Warn if the
+// the pedestrian button is held for 2 seconds)
+void handle_ped(unsigned short* ped, struct LED grn, struct LED ylw, 
+                struct LED red, struct Timer timer_ped, struct Timer timer_5c);
+
+// Handles the 5 second timer (i.e. ticking traffic betwen Go and Stop
+// every 5 seconds)
+void handle_5sc(struct LED grn, struct LED ylw, 
+                struct LED red, struct Timer timer_5c);
+
 /** Updates the traffic light state based on the given inputs
  *
  * @param pwr the state of the power button input
@@ -29,23 +47,7 @@ void tick_traffic(unsigned short pwr, unsigned short ped,
 enum States { Off, Stop, Warn, Go } state;
 
 int main(void) {
-  volatile unsigned short port_delay = 0;
-  RCGCGPIO |= 0x14;             // Enable ports C, E
-  RCGCTIMER |= 0x7;             // Enable Timers 0-2
-  port_delay++;
-  port_delay++;
-  
-  // Configure Port C for LEDs
-  GPIOAMSEL_C &= ~0x70;         // Disable analog function of PC4-6
-  GPIODIR_C |= 0x70;            // Set PC4-6 to output
-  GPIOAFSEL_C &= ~0x70;         // Set PC4-6 regular port function
-  GPIODEN_C |= 0x70;            // Enable digital output on PC4-6
-  
-  // Configure Port E for external buttons
-  GPIOAMSEL_E &= ~0x3;          // Disable analog function of PE0-1
-  GPIODIR_E &= ~0x3;            // Set PE0-1 to input
-  GPIOAFSEL_E &= ~0x3;          // Set PE0-1 regular port function
-  GPIODEN_E |= 0x3;             // Enable digital input on PE0-1
+  config_ports();
   
   // Configure timers
   struct Timer timer_pwr = {
@@ -82,36 +84,10 @@ int main(void) {
   unsigned short ped;
 
   while (1) {
-    // Checks if pwr is on or off
-    pwr = (GPIODATA_E & 0x1) == 0x1;
     // Checks if ped is on or off
     ped = (GPIODATA_E & 0x2) == 0x2;
                       
-    if (pwr) {
-      enable(timer_pwr); // start timer
-
-      if (isDone(timer_pwr)) { // Power has been held for 2 seconds
-        // Reset power timer interrupt status (start counting again)
-        reset(timer_pwr);
-
-        if (state == Off) {
-          // System was just turned on, start 5-second timer
-          enable(timer_5sc);
-        }
-
-        tick_traffic(pwr, 0, grn, ylw, red);
-
-        if (state == Off) {
-          // System was just turned off, cancel 5-second timer
-          disable(timer_5sc);
-          init(timer_5sc);      // Re-configure timer to ensure correct interval
-        }
-      }
-    } else if (isEnabled(timer_pwr)) {
-      // Power button released, cancel timer
-      disable(timer_pwr);
-      init(timer_pwr);          // Re-configure timer to ensure correct interval
-    }
+    handle_pwr(&pwr, grn, ylw, red, timer_pwr, timer_5sc);
     
     if (ped) {
       enable(timer_ped); // start timer
@@ -144,6 +120,66 @@ int main(void) {
   }
   
   return 0;
+}
+
+void config_ports() {
+  volatile unsigned short port_delay = 0;
+  RCGCGPIO |= 0x14;             // Enable ports C, E
+  RCGCTIMER |= 0x7;             // Enable Timers 0-2
+  port_delay++;
+  port_delay++;
+  
+  // Configure Port C for LEDs
+  GPIOAMSEL_C &= ~0x70;         // Disable analog function of PC4-6
+  GPIODIR_C |= 0x70;            // Set PC4-6 to output
+  GPIOAFSEL_C &= ~0x70;         // Set PC4-6 regular port function
+  GPIODEN_C |= 0x70;            // Enable digital output on PC4-6
+  
+  // Configure Port E for external buttons
+  GPIOAMSEL_E &= ~0x3;          // Disable analog function of PE0-1
+  GPIODIR_E &= ~0x3;            // Set PE0-1 to input
+  GPIOAFSEL_E &= ~0x3;          // Set PE0-1 regular port function
+  GPIODEN_E |= 0x3;             // Enable digital input on PE0-1
+}
+
+void handle_pwr(unsigned short* pwr, struct LED grn, struct LED ylw, 
+                struct LED red, struct Timer timer_pwr, struct Timer timer_5sc) {
+  *pwr = (GPIODATA_E & 0x1) == 0x10;
+  if (*pwr) {
+    enable(timer_pwr); // start timer
+
+    if (isDone(timer_pwr)) { // Power has been held for 2 seconds
+      // Reset power timer interrupt status (start counting again)
+      reset(timer_pwr);
+
+      if (state == Off) {
+        // System was just turned on, start 5-second timer
+        enable(timer_5sc);
+      }
+
+      tick_traffic(*pwr, 0, grn, ylw, red);
+
+      if (state == Off) {
+        // System was just turned off, cancel 5-second timer
+        disable(timer_5sc);
+        init(timer_5sc);      // Re-configure timer to ensure correct interval
+      }
+    }
+  } else if (isEnabled(timer_pwr)) {
+    // Power button released, cancel timer
+    disable(timer_pwr);
+    init(timer_pwr);          // Re-configure timer to ensure correct interval
+  }
+}
+
+void handle_ped(unsigned short* ped, struct LED grn, struct LED ylw, 
+                struct LED red, struct Timer timer_ped, struct Timer timer_5c) {
+                
+}
+
+void handle_5sc(struct LED grn, struct LED ylw, 
+                struct LED red, struct Timer timer_5c) {
+                
 }
 
 void tick_traffic(unsigned short pwr, unsigned short ped,
