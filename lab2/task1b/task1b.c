@@ -83,40 +83,10 @@ int main(void) {
   unsigned short pwr;
   unsigned short ped;
 
-  while (1) {
-    // Checks if ped is on or off
-    ped = (GPIODATA_E & 0x2) == 0x2;
-                      
+  while (1) {               
     handle_pwr(&pwr, grn, ylw, red, timer_pwr, timer_5sc);
-    
-    if (ped) {
-      enable(timer_ped); // start timer
-
-      if (isDone(timer_ped)) { // Pedestrian has been held for 2 seconds
-        // Reset interrupt status (start counting again)
-        reset(timer_ped);
-
-        tick_traffic(0, ped, grn, ylw, red);
-        
-        if (state == Warn) {
-          // Ped moved the state to Warn, reset the timer before going to Stop
-          disable(timer_5sc);
-          init(timer_5sc);      // Re-configure timer to ensure correct interval
-          enable(timer_5sc);
-        }
-      }
-    } else if (isEnabled(timer_ped)) {
-      // Pedestrian button released, cancel timer
-      disable(timer_ped);
-      init(timer_ped);          // Re-configure timer to ensure correct interval
-    }
-    
-    if (isDone(timer_5sc)) {
-      // 5 seconds have elapsed, tick traffic
-      tick_traffic(0, 0, grn, ylw, red);
-      // Reset 5-second timer
-      reset(timer_5sc);
-    }
+    handle_ped(&ped, grn, ylw, red, timer_ped, timer_5sc);
+    handle_5sc(grn, ylw, red, timer_5sc);
   }
   
   return 0;
@@ -144,7 +114,8 @@ void config_ports() {
 
 void handle_pwr(unsigned short* pwr, struct LED grn, struct LED ylw, 
                 struct LED red, struct Timer timer_pwr, struct Timer timer_5sc) {
-  *pwr = (GPIODATA_E & 0x1) == 0x10;
+  // Checks if pwr is on or off
+  *pwr = (GPIODATA_E & 0x1) == 0x1;
   if (*pwr) {
     enable(timer_pwr); // start timer
 
@@ -173,13 +144,40 @@ void handle_pwr(unsigned short* pwr, struct LED grn, struct LED ylw,
 }
 
 void handle_ped(unsigned short* ped, struct LED grn, struct LED ylw, 
-                struct LED red, struct Timer timer_ped, struct Timer timer_5c) {
-                
+                struct LED red, struct Timer timer_ped, struct Timer timer_5sc) {
+  // Checks if ped is on or off
+  *ped = (GPIODATA_E & 0x2) == 0x2;
+  if (*ped) {
+    enable(timer_ped); // start timer
+
+    if (isDone(timer_ped)) { // Pedestrian has been held for 2 seconds
+      // Reset interrupt status (start counting again)
+      reset(timer_ped);
+
+      tick_traffic(0, *ped, grn, ylw, red);
+      
+      if (state == Warn) {
+        // Ped moved the state to Warn, reset the timer before going to Stop
+        disable(timer_5sc);
+        init(timer_5sc);      // Re-configure timer to ensure correct interval
+        enable(timer_5sc);
+      }
+    }
+  } else if (isEnabled(timer_ped)) {
+    // Pedestrian button released, cancel timer
+    disable(timer_ped);
+    init(timer_ped);          // Re-configure timer to ensure correct interval
+  }
 }
 
 void handle_5sc(struct LED grn, struct LED ylw, 
-                struct LED red, struct Timer timer_5c) {
-                
+                struct LED red, struct Timer timer_5sc) {
+  if (isDone(timer_5sc)) {
+    // 5 seconds have elapsed, tick traffic
+    tick_traffic(0, 0, grn, ylw, red);
+    // Reset 5-second timer
+    reset(timer_5sc);
+  }             
 }
 
 void tick_traffic(unsigned short pwr, unsigned short ped,
