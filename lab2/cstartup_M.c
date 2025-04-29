@@ -22,7 +22,10 @@ extern void SVC_Handler( void );
 extern void DebugMon_Handler( void );
 extern void PendSV_Handler( void );
 extern void SysTick_Handler( void );
+extern void PortE_Handler ( void );
 extern void Timer0A_Handler ( void );
+extern void Timer1A_Handler ( void );
+extern void Timer2A_Handler ( void );
 extern void PortJ_Handler ( void );
 
 typedef void( *intfunc )( void );
@@ -62,7 +65,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  0,
+  PortE_Handler,
   0,
   0,
   0,
@@ -79,6 +82,9 @@ const intvec_elem __vector_table[] =
   0,
   Timer0A_Handler,
   0,
+  Timer1A_Handler,
+  0,
+  Timer2A_Handler,
   0,
   0,
   0,
@@ -106,10 +112,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  0,
-  0,
-  0,
-  //PortJ_Handler
+  PortJ_Handler
 };
 
 #pragma call_graph_root = "interrupt"

@@ -27,6 +27,11 @@
 #define GPIODATA_E  (*((volatile uint32_t *) 0x4005C3FC))
 #define GPIODEN_E   (*((volatile uint32_t *) 0x4005C51C))
 #define GPIODIR_E   (*((volatile uint32_t *) 0x4005C400))
+#define GPIOIBE_E   (*((volatile uint32_t *) 0x4005C408))
+#define GPIOICR_E   (*((volatile uint32_t *) 0x4005C41C))
+#define GPIOIEV_E   (*((volatile uint32_t *) 0x4005C40C))
+#define GPIOIM_E    (*((volatile uint32_t *) 0x4005C410))
+#define GPIOIS_E    (*((volatile uint32_t *) 0x4005C404))
 
 // Registers for port F: Used in Task 1a for on-board LEDs D3 and D4
 #define GPIODATA_F  (*((volatile uint32_t *) 0x4005D3FC))
@@ -55,6 +60,8 @@
 // Registers for NVIC
 #define NVIC_EN0    (*((volatile uint32_t *) 0xE000E100))
 #define NVIC_EN1    (*((volatile uint32_t *) 0xE000E104))
+
+#define NVIC_PRI1   (*((volatile uint32_t *) 0xE000E404))
 #define NVIC_PRI12  (*((volatile uint32_t *) 0xE000E430))
 
 // Additional Macros
