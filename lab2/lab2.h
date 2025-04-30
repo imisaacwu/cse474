@@ -1,7 +1,7 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 14, 2025
+ * Apr. 29, 2025
  * Header file for Lab 2
  */
 
@@ -14,14 +14,14 @@
 #define RCGCGPIO    (*((volatile uint32_t *) 0x400FE608))
 #define RCGCTIMER   (*((volatile uint32_t *) 0x400FE604))
 
-// Registers for port C: Used in Task 1b for external LEDs
+// Registers for port C: Used in Task 1b, 2c for external LEDs
 #define GPIOAFSEL_C (*((volatile uint32_t *) 0x4005A420))
 #define GPIOAMSEL_C (*((volatile uint32_t *) 0x4005A528))
 #define GPIODATA_C  (*((volatile uint32_t *) 0x4005A3FC))
 #define GPIODEN_C   (*((volatile uint32_t *) 0x4005A51C))
 #define GPIODIR_C   (*((volatile uint32_t *) 0x4005A400))
 
-// Registers for port E: Used in Task 1b for external buttons
+// Registers for port E: Used in Task 1b, 2c for external buttons
 #define GPIOAFSEL_E (*((volatile uint32_t *) 0x4005C420))
 #define GPIOAMSEL_E (*((volatile uint32_t *) 0x4005C528))
 #define GPIODATA_E  (*((volatile uint32_t *) 0x4005C3FC))
@@ -33,7 +33,7 @@
 #define GPIOIM_E    (*((volatile uint32_t *) 0x4005C410))
 #define GPIOIS_E    (*((volatile uint32_t *) 0x4005C404))
 
-// Registers for port F: Used in Task 1a for on-board LEDs D3 and D4
+// Registers for port F: Used in Task 1a, 2a for on-board LEDs D3 and D4
 #define GPIODATA_F  (*((volatile uint32_t *) 0x4005D3FC))
 #define GPIODEN_F   (*((volatile uint32_t *) 0x4005D51C))
 #define GPIODIR_F   (*((volatile uint32_t *) 0x4005D400))
@@ -52,7 +52,7 @@
 #define GPIOPUR_J   (*((volatile uint32_t *) 0x40060510))
 #define GPIORIS_J   (*((volatile uint32_t *) 0x40060414))
 
-// Registers for port N: Used in Task 1a for on-board LEDs D1 and D2
+// Registers for port N: Used in Task 1a, 2a, 2b for on-board LEDs D1 and D2
 #define GPIODATA_N  (*((volatile uint32_t *) 0x400643FC))
 #define GPIODEN_N   (*((volatile uint32_t *) 0x4006451C))
 #define GPIODIR_N   (*((volatile uint32_t *) 0x40064400))
