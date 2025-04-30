@@ -99,6 +99,12 @@ void config_ports() {
   NVIC_PRI1 |= 0x70;            // Set priority of interrupt 4 to 7
 }
 
+/**
+ * Handles the events triggered by input on Port E, which is configured
+ * to read the button presses for the power and pedestrian button.
+ * 
+ * Starts the respective timers for each button upon being pressed.
+ */
 #pragma call_graph_root = "interrupt"
 __weak void PortE_Handler ( void ) {
   // Reset interrupt status
@@ -127,6 +133,11 @@ __weak void PortE_Handler ( void ) {
   }
 }
 
+/**
+ * Handles the events triggered when the power button's timer
+ * times out. If the system was off, it will now be turned on to
+ * the red state for 5 seconds. Otherwise, it will be turned off.
+ */
 #pragma call_graph_root = "interrupt"
 __weak void Timer0A_Handler ( void ) {
   // Power was just held for 2 seconds
@@ -148,6 +159,13 @@ __weak void Timer0A_Handler ( void ) {
   }
 }
 
+/**
+ * Handles the events triggered when the pedestrian button's timer
+ * times out. In the green state, this will transition the system
+ * to the warn state. In the warn state, it will reset the 5-second
+ * timer such that the system will be held in the warn state for 5
+ * seconds.
+ */
 #pragma call_graph_root = "interrupt"
 __weak void Timer1A_Handler ( void ) {
   // Pedestrian button was just held for 2 seconds
@@ -165,6 +183,10 @@ __weak void Timer1A_Handler ( void ) {
   }
 }
 
+/**
+ * Handles the events triggered upon timeout of the 5-second timer.
+ * Resets the timer and tick traffic to the next state.
+ */
 #pragma call_graph_root = "interrupt"
 __weak void Timer2A_Handler ( void ) {
   // Reset 5-second timer
