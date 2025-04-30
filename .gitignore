@@ -45,3 +45,6 @@ Backup*
 
 # IAR .dep files
 *.dep
+
+# MacOS metadata
+.DS_Store
