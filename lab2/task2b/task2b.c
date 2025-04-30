@@ -1,8 +1,9 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 25, 2025
- * Task 2b
+ * Apr. 29, 2025
+ * Task 2b is a simple two-button system that enables and disables
+ * the periodic flashing of an on-board LED.
  */
 
 #include <stdint.h>
@@ -10,7 +11,7 @@
 #include "../lab2.h"
 #include "../timer.h"
 
--+int main(void) {
+int main(void) {
   volatile unsigned short delay = 0;
   RCGCGPIO |= 0x1100;       // Enable port N and J
   RCGCTIMER |= 0x1;         // Enable Timer 0
@@ -55,14 +56,28 @@
   return 0;
 }
 
+/**
+ * Method that handles the time-out events of Timer0A
+ * Called by NVIC when Timer0A times out.
+ * Will clear the interrupt status (i.e. resets timer)
+ * Blinks LED D1.
+ */
 #pragma call_graph_root = "interrupt"
 __weak void Timer0A_Handler ( void ) {
   GPTMICR(0) |= 0x1;
   GPIODATA_N ^= 0x2;
 }
 
+/**
+ * Method that handles rising edges on Port J
+ * Called by NVIC when any GPIO on Port J has a rising edge
+ * Will clear the interrupt status (i.e. allow for more interrupts)
+ * If button SW1 was pressed, will stop the flashing of LED1 and turn
+ * on LED 2. If button SW2 was pressed, will re-enable the flashing of
+ * LED1 if previously disabled and turn off LED 2.
+ */
 #pragma call_graph_root = "interrupt"
-__weak void PortJ_Handler ( void ) {\
+__weak void PortJ_Handler ( void ) {
   // Reset interrupt status
   GPIOCR_J |= 0x3;
   // Check which button was pressed

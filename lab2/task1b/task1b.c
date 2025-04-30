@@ -1,7 +1,7 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 14, 2025
+ * Apr. 29, 2025
  * Task 1b represents a traffic light system where the system will start
  * on the red light when the system is on. Users can press and hold the
  * pedestrian button during a green light to change the light from yellow to red.
@@ -17,22 +17,47 @@
 // Configures necessary ports
 void config_ports();
 
-// Handles the power button (i.e., turning system on/off after pressed
-// for 2 seconds.
+/**
+ * Helper method to handle any inputs relating to the power button
+ * (i.e. turning system on/off after being pressed for 2 seconds)
+ *
+ * @param pwr a pointer to the status of the power button
+ * @param grn the green LED output
+ * @param ylw the yellow LED output
+ * @param red the red LED output
+ * @param timer_pwr the 2-second Timer associated with the power button
+ * @param timer_5s the 5-second Timer associated with the traffic light cycle
+ */
 void handle_pwr(unsigned short* pwr, struct LED grn, struct LED ylw, 
-                struct LED red, struct Timer timer_pwr, struct Timer timer_5c);
+                struct LED red, struct Timer timer_pwr, struct Timer timer_5s);
 
-// Handles the pedestrian button (i.e., switching from Go -> Warn if the
-// the pedestrian button is held for 2 seconds)
+/**
+ * Helper method to handle any inputs relating to the pedestrian button
+ * (i.e. switching from Go -> Warn if pressed for 2 seconds)
+ *
+ * @param grn the green LED output
+ * @param ylw the yellow LED output
+ * @param red the red LED output
+ * @param timer_ped the 2-second Timer associated with the pedestrian button
+ * @param timer_5s the 5-second Timer associated with the traffic light cycle
+ */
 void handle_ped(unsigned short* ped, struct LED grn, struct LED ylw, 
-                struct LED red, struct Timer timer_ped, struct Timer timer_5c);
+                struct LED red, struct Timer timer_ped, struct Timer timer_5s);
 
-// Handles the 5 second timer (i.e. ticking traffic betwen Go and Stop
-// every 5 seconds)
+/**
+ * Helper method to handle time-out events relating to the 5-second timer
+ * associated with the traffic light cycle
+ *
+ * @param grn the green LED output
+ * @param ylw the yellow LED output
+ * @param red the red LED output
+ * @param timer_5s the 5-second Timer associated with the traffic light cycle
+ */ 
 void handle_5sc(struct LED grn, struct LED ylw, 
-                struct LED red, struct Timer timer_5c);
+                struct LED red, struct Timer timer_5s);
 
-/** Updates the traffic light state based on the given inputs
+/**
+ * Updates the traffic light state based on the given inputs
  *
  * @param pwr the state of the power button input
  * @param ped the state of the pedestrian button input

@@ -1,3 +1,10 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * Apr. 29, 2025
+ * Implementations for Timer functions
+ */
+
 #include <stdbool.h>
 #include <stdint.h>
 
