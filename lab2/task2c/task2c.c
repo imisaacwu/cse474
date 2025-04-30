@@ -15,24 +15,18 @@
 #include "../lab2.h"
 #include "../LED.h"
 #include "../timer.h"
+#include "../traffic_fsm.h"
 
 // Configures necessary ports
 void config_ports();
-
-/** Updates the traffic light state based on the given inputs
- *
- * @param pwr the state of the power button input
- * @param ped the state of the pedestrian button input
- */
-void tick_traffic(unsigned short pwr, unsigned short ped);
-
-// The set of possible states for the traffic light system
-enum States { Off, Stop, Warn, Go } state;
 
 // Connect configured Port C pins to LEDs
 struct LED grn = {&GPIODATA_C, 4};
 struct LED ylw = {&GPIODATA_C, 5};
 struct LED red = {&GPIODATA_C, 6};
+
+// Traffic Light FSM State
+State state;
 
 // Global timers
 struct Timer timer_pwr = {
@@ -105,66 +99,6 @@ void config_ports() {
   NVIC_PRI1 |= 0x70;            // Set priority of interrupt 4 to 7
 }
 
-void tick_traffic(unsigned short pwr, unsigned short ped) {
-  // Transitions
-  switch (state) {
-    case Stop:
-      off(red);
-      if (pwr) {
-        state = Off;
-      } else if (ped) {
-        state = Stop;
-      } else {
-        state = Go;
-      }
-      break;
-
-    case Warn:
-      off(ylw);
-      if (pwr) {
-        state = Off;
-      } else {
-        state = Stop;
-      }
-      break;
-    
-    case Go:
-      off(grn);
-      if (pwr) {
-        state = Off;
-      } else if (ped) {
-        state = Warn;
-      } else {
-        state = Stop;
-      }
-      break;
-    
-    case Off:
-      if (pwr) {
-        state = Stop;
-      }
-      break;
-  }
-  
-  // State actions
-  switch (state) {
-    case Stop:
-      on(red);
-      break;
-    
-    case Warn:
-      on(ylw);
-      break;
-      
-    case Go:
-      on(grn);
-      break;
-    
-    case Off:
-      break;
-  }
-}
-
 #pragma call_graph_root = "interrupt"
 __weak void PortE_Handler ( void ) {
   // Reset interrupt status
@@ -204,7 +138,7 @@ __weak void Timer0A_Handler ( void ) {
     enable(timer_5s);
   }
 
-  tick_traffic(1, 0);
+  tick_traffic(state, 1, 0);
 
   if (state == Off) {
     // System was just turned off, cancel 5-second timer
@@ -220,7 +154,7 @@ __weak void Timer1A_Handler ( void ) {
   // Reset interrupt status (start counting again)
   reset(timer_ped);   
 
-  tick_traffic(0, 1);
+  tick_traffic(state, 0, 1);
   
   if (state == Warn) {
     // Ped moved the state to Warn, reset the timer before going to Stop
@@ -236,5 +170,5 @@ __weak void Timer2A_Handler ( void ) {
   // Reset 5-second timer
   reset(timer_5s);
   // 5 seconds have elapsed, tick traffic
-  tick_traffic(0, 0);
+  tick_traffic(state, 0, 0);
 }
