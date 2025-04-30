@@ -1,10 +1,11 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 18, 2025
+ * Apr. 30, 2025
  * Task 2a controls the LEDs on the TIVA board such that
- * LEDs D1-D4 turn on and off in a sequential manner every 1 Hz.
- * MODIFICATION: Done so using interrupts
+ * LEDs D1-D4 turn on and off in a sequential manner. LED
+ * handling is done via an interrupt handler instead of
+ * the main program.
  */
 
 #include <stdint.h>

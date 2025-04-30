@@ -1,9 +1,10 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 18, 2025
+ * Apr. 30, 2025
  * Task 1a controls the LEDs on the TIVA board such that
- * LEDs D1-D4 turn on and off in a sequential manner every 1 Hz.
+ * LEDs D1-D4 turn on and off in a sequential manner at 
+ * frequency of 1 Hz
  */
 
 #include <stdint.h>
@@ -30,8 +31,8 @@
     0, TIMER_PERIODIC, 1 * CLK_FRQ,
     &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
   };
-  init(timer);
-  enable(timer);
+  init(timer);              // Configure Timer 0
+  enable(timer);            // Start timer
   
   // Periodic pattern
   while(1) {
@@ -42,15 +43,15 @@
     
     while (!isDone(timer));
     reset(timer);
-    GPIODATA_N ^= 0x1;
+    GPIODATA_N ^= 0x1;      // Flip LED D2
     
     while (!isDone(timer));
     reset(timer);
-    GPIODATA_F ^= 0x10;
+    GPIODATA_F ^= 0x10;     // Flip LED D3
     
     while (!isDone(timer));
     reset(timer);
-    GPIODATA_F ^= 0x1;
+    GPIODATA_F ^= 0x1;      // Flip LED D4
   }
   return 0;
 }

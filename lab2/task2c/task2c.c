@@ -1,10 +1,12 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 28, 2025
- * Task 2c represents a traffic light system where the system will start
- * on the red light when the system is on. Users can press and hold the
- * pedestrian button during a green light to change the light from yellow to red.
+ * Apr. 30, 2025
+ * Task 2c represents a traffic light system configured using interrupts.
+ * Users can hold down the power button to trigger the system on, starting
+ * at the red light. Time-outs will trigger the system to go between green
+ * and red. At the green light, users can press the pedestrian button to
+ * trigger the yellow light before going to the red light.
  */
 
 #include <stdbool.h>
@@ -172,26 +174,29 @@ __weak void PortE_Handler ( void ) {
   unsigned short ped = (GPIODATA_E & 0x2) == 0x2;
   
   if (pwr) {
-    enable(timer_pwr); // start timer
+    // start timer 
+    enable(timer_pwr);                   
   } else if (isEnabled(timer_pwr)) {
     // Power button released, cancel timer
     disable(timer_pwr);
-    init(timer_pwr);          // Re-configure timer to ensure correct interval
+    // Re-configure timer to ensure correct interval
+    init(timer_pwr);                     
   }
   
   if (ped) {
-    enable(timer_ped); // start timer
+    enable(timer_ped);
   } else if (isEnabled(timer_ped)) {
     // Pedestrian button released, cancel timer
-    disable(timer_ped);
-    init(timer_ped);          // Re-configure timer to ensure correct interval
+    disable(timer_ped);     
+    // Re-configure timer to ensure correct interval    
+    init(timer_ped);            
   }
 }
 
 #pragma call_graph_root = "interrupt"
 __weak void Timer0A_Handler ( void ) {
   // Power was just held for 2 seconds
-  // Reset power timer interrupt status (start counting again)
+  // Reset interrupt status (start counting again)
   reset(timer_pwr);
   
   if (state == Off) {
@@ -204,7 +209,8 @@ __weak void Timer0A_Handler ( void ) {
   if (state == Off) {
     // System was just turned off, cancel 5-second timer
     disable(timer_5s);
-    init(timer_5s);      // Re-configure timer to ensure correct interval
+    // Re-configure timer to ensure correct interval
+    init(timer_5s);             
   }
 }
 
@@ -212,14 +218,15 @@ __weak void Timer0A_Handler ( void ) {
 __weak void Timer1A_Handler ( void ) {
   // Pedestrian button was just held for 2 seconds
   // Reset interrupt status (start counting again)
-  reset(timer_ped);
+  reset(timer_ped);   
 
   tick_traffic(0, 1);
   
   if (state == Warn) {
     // Ped moved the state to Warn, reset the timer before going to Stop
     disable(timer_5s);
-    init(timer_5s);      // Re-configure timer to ensure correct interval
+    // Re-configure timer to ensure correct interval
+    init(timer_5s);      
     enable(timer_5s);
   }
 }
