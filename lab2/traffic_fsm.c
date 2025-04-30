@@ -8,50 +8,50 @@
 #include "LED.h"
 #include "traffic_fsm.h"
 
-void tick_traffic(State &state, unsigned short pwr, unsigned short ped,
+void tick_traffic(State *state, unsigned short pwr, unsigned short ped,
                   struct LED red, struct LED ylw, struct LED grn) {
   // Transitions
-  switch (state) {
+  switch (*state) {
     case Stop:
       off(red);
       if (pwr) {
-        state = Off;
+        *state = Off;
       } else if (ped) {
-        state = Stop;
+        *state = Stop;
       } else {
-        state = Go;
+        *state = Go;
       }
       break;
 
     case Warn:
       off(ylw);
       if (pwr) {
-        state = Off;
+        *state = Off;
       } else {
-        state = Stop;
+        *state = Stop;
       }
       break;
 
     case Go:
       off(grn);
       if (pwr) {
-        state = Off;
+        *state = Off;
       } else if (ped) {
-        state = Warn;
+        *state = Warn;
       } else {
-        state = Stop;
+        *state = Stop;
       }   
       break;
     
     case Off:
       if (pwr) {
-        state = Stop;
+        *state = Stop;
       }   
       break;
   }
   
   // State actions
-  switch (state) {
+  switch (*state) {
     case Stop:
       on(red);
       break;

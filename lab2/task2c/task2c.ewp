@@ -2033,13 +2033,7 @@
         <name>$PROJ_DIR$\..\cstartup_M.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\..\lab2.h</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\..\LED.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\..\LED.h</name>
     </file>
     <file>
         <name>$PROJ_DIR$\task2c.c</name>
@@ -2048,6 +2042,6 @@
         <name>$PROJ_DIR$\..\timer.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\..\timer.h</name>
+        <name>$PROJ_DIR$\..\traffic_fsm.c</name>
     </file>
 </project>

@@ -1,7 +1,7 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 29, 2025
+ * Apr. 30, 2025
  * Task 1b represents a traffic light system where the system will start
  * on the red light when the system is on. Users can press and hold the
  * pedestrian button during a green light to change the light from yellow to red.
@@ -23,31 +23,41 @@ void config_ports();
  * (i.e. turning system on/off after being pressed for 2 seconds)
  *
  * @param pwr a pointer to the status of the power button
- * @param timer_pwr the 2-second Timer associated with the power button
- * @param timer_5s the 5-second Timer associated with the traffic light cycle
  */
-void handle_pwr(unsigned short* pwr, struct Timer timer_pwr, struct Timer timer_5s);
+void handle_pwr(unsigned short* pwr);
 
 /**
  * Helper method to handle any inputs relating to the pedestrian button
  * (i.e. switching from Go -> Warn if pressed for 2 seconds)
  *
  * @param ped a pointer to the status of the pedestrian button
- * @param timer_ped the 2-second Timer associated with the pedestrian button
- * @param timer_5s the 5-second Timer associated with the traffic light cycle
  */
-void handle_ped(unsigned short* ped, struct Timer timer_ped, struct Timer timer_5s);
+void handle_ped(unsigned short* ped);
 
 /**
  * Helper method to handle time-out events relating to the 5-second timer
  * associated with the traffic light cycle
- *
- * @param timer_5s the 5-second Timer associated with the traffic light cycle
  */ 
-void handle_5sc(struct Timer timer_5s);
+void handle_5sc();
 
 // Traffic Light FSM state
 State state;
+
+// Global timers
+struct Timer timer_pwr = {
+  0, TIMER_PERIODIC, 2 * CLK_FRQ,
+  &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
+};
+
+struct Timer timer_ped = {
+  1, TIMER_PERIODIC, 2 * CLK_FRQ,
+  &GPTMCTL(1), &GPTMCFG(1), &GPTMTAMR(1), &GPTMTAILR(1), &GPTMRIS(1), &GPTMICR(1)
+};
+
+struct Timer timer_5s = {
+  2, TIMER_PERIODIC, 5 * CLK_FRQ,
+  &GPTMCTL(2), &GPTMCFG(2), &GPTMTAMR(2), &GPTMTAILR(2), &GPTMRIS(2), &GPTMICR(2)
+};
 
 // Connect configured Port C pins to LEDs
 struct LED grn = {&GPIODATA_C, 4};
@@ -58,25 +68,11 @@ int main(void) {
   config_ports();
   
   // Configure timers
-  struct Timer timer_pwr = {
-    0, TIMER_PERIODIC, 2 * CLK_FRQ,
-    &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
-  };
-  
-  struct Timer timer_ped = {
-    1, TIMER_PERIODIC, 2 * CLK_FRQ,
-    &GPTMCTL(1), &GPTMCFG(1), &GPTMTAMR(1), &GPTMTAILR(1), &GPTMRIS(1), &GPTMICR(1)
-  };
-  
-  struct Timer timer_5s = {
-    2, TIMER_PERIODIC, 5 * CLK_FRQ,
-    &GPTMCTL(2), &GPTMCFG(2), &GPTMTAMR(2), &GPTMTAILR(2), &GPTMRIS(2), &GPTMICR(2)
-  };
-  
   init(timer_pwr);
   init(timer_ped);
   init(timer_5s);
   
+  // Initialize LEDs
   off(grn);
   off(ylw);
   off(red);
@@ -87,20 +83,20 @@ int main(void) {
   unsigned short ped;
 
   while (1) {               
-    handle_pwr(&pwr, timer_pwr, timer_5s);
-    handle_ped(&ped, timer_ped, timer_5s);
-    handle_5sc(timer_5s);
+    handle_pwr(&pwr);
+    handle_ped(&ped);
+    handle_5sc();
   }
   
   return 0;
 }
 
 void config_ports() {
-  volatile unsigned short port_delay = 0;
+  volatile unsigned short delay = 0;
   RCGCGPIO |= 0x14;             // Enable ports C, E
   RCGCTIMER |= 0x7;             // Enable Timers 0-2
-  port_delay++;
-  port_delay++;
+  delay++;
+  delay++;
   
   // Configure Port C for LEDs
   GPIOAMSEL_C &= ~0x70;         // Disable analog function of PC4-6
@@ -115,7 +111,7 @@ void config_ports() {
   GPIODEN_E |= 0x3;             // Enable digital input on PE0-1
 }
 
-void handle_pwr(unsigned short *pwr, struct Timer timer_pwr, struct Timer timer_5s) {
+void handle_pwr(unsigned short *pwr) {
   // Checks if pwr is on or off
   *pwr = (GPIODATA_E & 0x1) == 0x1;
   if (*pwr) {
@@ -130,7 +126,7 @@ void handle_pwr(unsigned short *pwr, struct Timer timer_pwr, struct Timer timer_
         enable(timer_5s);
       }
 
-      tick_traffic(state, *pwr, 0, red, ylw, grn);
+      tick_traffic(&state, *pwr, 0, red, ylw, grn);
 
       if (state == Off) {
         // System was just turned off, cancel 5-second timer
@@ -145,7 +141,7 @@ void handle_pwr(unsigned short *pwr, struct Timer timer_pwr, struct Timer timer_
   }
 }
 
-void handle_ped(struct Timer timer_ped, struct Timer timer_5s) {
+void handle_ped(unsigned short *ped) {
   // Checks if ped is on or off
   *ped = (GPIODATA_E & 0x2) == 0x2;
   if (*ped) {
@@ -155,7 +151,7 @@ void handle_ped(struct Timer timer_ped, struct Timer timer_5s) {
       // Reset interrupt status (start counting again)
       reset(timer_ped);
 
-      tick_traffic(state, 0, *ped, red, ylw, grn);
+      tick_traffic(&state, 0, *ped, red, ylw, grn);
       
       if (state == Warn) {
         // Ped moved the state to Warn, reset the timer before going to Stop
@@ -171,10 +167,10 @@ void handle_ped(struct Timer timer_ped, struct Timer timer_5s) {
   }
 }
 
-void handle_5sc(struct Timer timer_5s) {
+void handle_5sc() {
   if (isDone(timer_5s)) {
     // 5 seconds have elapsed, tick traffic
-    tick_traffic(state, 0, 0, red, ylw, grn);
+    tick_traffic(&state, 0, 0, red, ylw, grn);
     // Reset 5-second timer
     reset(timer_5s);
   }             

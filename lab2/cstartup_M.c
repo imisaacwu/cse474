@@ -65,7 +65,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  PortE_Handler,
+  0,//PortE_Handler,
   0,
   0,
   0,
@@ -82,11 +82,9 @@ const intvec_elem __vector_table[] =
   0,
   Timer0A_Handler,
   0,
-  Timer1A_Handler,
+  0,//Timer1A_Handler,
   0,
-  Timer2A_Handler,
-  0,
-  0,
+  0,//Timer2A_Handler,
   0,
   0,
   0,
@@ -112,7 +110,9 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  PortJ_Handler
+  0,
+  0,
+  0,//PortJ_Handler
 };
 
 #pragma call_graph_root = "interrupt"

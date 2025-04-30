@@ -13,12 +13,37 @@
 #include "../lab2.h"
 #include "../timer.h"
 
+// Configures necessary ports
+void config_ports();
+
+// Global timer
+struct Timer timer = {
+  0, TIMER_PERIODIC, 1 * CLK_FRQ,
+  &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
+};
+
+// Global variable to keep track of which part of the cycle we are in
+uint32_t i = 0;
+
 int main(void) {
-  volatile unsigned short tick = 0;
+  config_ports();
+
+  init(timer);
+  GPTMIMR(0) |= 0x1;        // Enable interrupt on time-out
+  NVIC_EN0 |= 0x80000;      // Enable interrupt number 19
+  enable(timer);
+  
+  while(1) {}
+  
+  return 0;
+}
+
+void config_ports() {
+  volatile unsigned short delay = 0;
   RCGCGPIO |= 0x1020;       // Enable ports N and F
   RCGCTIMER |= 0x1;         // Enable Timer 0
-  tick++;
-  tick++;
+  delay++;
+  delay++;
 
   GPIODIR_F |= 0x11;        // Set PF0 (LED D4) and PF4 (LED D3) as outputs
   GPIODEN_F |= 0x11;        // Set PF0 and PF4 to digital ports
@@ -28,21 +53,7 @@ int main(void) {
 
   GPIODATA_F &= ~0x11;      // Set PF0 and PF4 to 0 (off)
   GPIODATA_N &= ~0x3;       // Set PN0 and PN1 to 0 (off)
-  
-  struct Timer timer = {
-    0, TIMER_PERIODIC, 1 * CLK_FRQ,
-    &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
-  };
-  init(timer);
-  GPTMIMR(0) |= 0x1;        // Enable interrupt on time-out
-  NVIC_EN0 |= 0x80000;      // Enable interrupt number 19
-  enable(timer);
-  
-  while(1) {}
-  return 0;
 }
-
-uint32_t i = 0;
 
 /**
  * Handles the event trigger when Timer 0A times out. Resets

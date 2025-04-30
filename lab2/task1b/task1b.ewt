@@ -2314,10 +2314,7 @@
         </settings>
     </configuration>
     <file>
-        <name>$PROJ_DIR$\LED.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\LED.h</name>
+        <name>$PROJ_DIR$\..\LED.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\task1b.c</name>
@@ -2326,6 +2323,6 @@
         <name>$PROJ_DIR$\..\timer.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\..\timer.h</name>
+        <name>$PROJ_DIR$\..\traffic_fsm.c</name>
     </file>
 </project>

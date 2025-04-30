@@ -7,7 +7,7 @@
  */
 
 // The set of possible states for the traffic light system
-enum States { Off, Stop, Warn, Go};
+typedef enum { Off, Stop, Warn, Go } State;
 
 /** Updates the traffic light state based on the given inputs
  *
@@ -18,5 +18,5 @@ enum States { Off, Stop, Warn, Go};
  * @param ylw the yellow LED output
  * @param grn the green LED output
  */
-void tick_traffic(State &state, unsigned short pwr, unsigned short ped
+void tick_traffic(State *state, unsigned short pwr, unsigned short ped,
                   struct LED red, struct LED ylw, struct LED grn);

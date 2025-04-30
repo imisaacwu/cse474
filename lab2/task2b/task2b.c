@@ -11,7 +11,29 @@
 #include "../lab2.h"
 #include "../timer.h"
 
+// Configures necessary ports
+void config_ports();
+
+// Global timer
+struct Timer timer = {
+  0, TIMER_PERIODIC, 1 * CLK_FRQ,
+  &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
+};
+
 int main(void) {
+  config_ports();
+
+  init(timer);
+  GPTMIMR(0) |= 0x1;        // Enable interrupt on time-out
+  NVIC_EN0 |= 0x80000;      // Enable interrupt number 19
+  enable(timer);
+
+  while (1) {}
+  
+  return 0;
+}
+
+void config_ports() {
   volatile unsigned short delay = 0;
   RCGCGPIO |= 0x1100;       // Enable port N and J
   RCGCTIMER |= 0x1;         // Enable Timer 0
@@ -41,19 +63,6 @@ int main(void) {
 
   NVIC_EN1 |= 0x80000;      // Enable interrupt number 51
   NVIC_PRI12 |= 0x70000000; // Set priority of interrupt 51 to 7
-
-  struct Timer timer = {
-    0, TIMER_PERIODIC, 1 * CLK_FRQ,
-    &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
-  };
-  init(timer);
-  GPTMIMR(0) |= 0x1;        // Enable interrupt on time-out
-  NVIC_EN0 |= 0x80000;      // Enable interrupt number 19
-  enable(timer);
-
-  while (1) {}
-  
-  return 0;
 }
 
 /**
@@ -64,7 +73,7 @@ int main(void) {
  */
 #pragma call_graph_root = "interrupt"
 __weak void Timer0A_Handler ( void ) {
-  GPTMICR(0) |= 0x1;
+  reset(timer);
   GPIODATA_N ^= 0x2;
 }
 
@@ -86,12 +95,12 @@ __weak void PortJ_Handler ( void ) {
 
   if (sw1) {
     // Disable Timer 0A
-    GPTMCTL(0) &= ~0x1;
+    disable(timer);
     // Turn on LED2
     GPIODATA_N |= 0x1;
   } else if (sw2) {
     // Enable Timer 0A
-    GPTMCTL(0) |= 0x1;
+    enable(timer);
     // Turn off LED2
     GPIODATA_N &= ~0x1;
   }

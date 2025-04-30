@@ -45,7 +45,7 @@ struct Timer timer_5s = {
 int main(void) {
   config_ports();
   
-  // Configure timers
+  // Configure timers & their interrupts
   init(timer_pwr);
   GPTMIMR(0) |= 0x1;    // Enable interrupt on time-out
   NVIC_EN0 |= 0x80000;  // Enable interrupt number 19
@@ -58,6 +58,7 @@ int main(void) {
   GPTMIMR(2) |= 0x1;    // Enable interrupt on time-out
   NVIC_EN0 |= 0x800000; // Enable interrupt number 23
   
+  // Initialize LEDs
   off(grn);
   off(ylw);
   off(red);
@@ -70,11 +71,11 @@ int main(void) {
 }
 
 void config_ports() {
-  volatile unsigned short port_delay = 0;
+  volatile unsigned short delay = 0;
   RCGCGPIO |= 0x14;             // Enable ports C, E
   RCGCTIMER |= 0x7;             // Enable Timers 0-2
-  port_delay++;
-  port_delay++;
+  delay++;
+  delay++;
   
   // Configure Port C for LEDs
   GPIOAMSEL_C &= ~0x70;         // Disable analog function of PC4-6
@@ -149,7 +150,7 @@ __weak void Timer0A_Handler ( void ) {
     enable(timer_5s);
   }
 
-  tick_traffic(state, 1, 0);
+  tick_traffic(&state, 1, 0, red, ylw, grn);
 
   if (state == Off) {
     // System was just turned off, cancel 5-second timer
@@ -172,7 +173,7 @@ __weak void Timer1A_Handler ( void ) {
   // Reset interrupt status (start counting again)
   reset(timer_ped);   
 
-  tick_traffic(state, 0, 1);
+  tick_traffic(&state, 0, 1, red, ylw, grn);
   
   if (state == Warn) {
     // Ped moved the state to Warn, reset the timer before going to Stop
@@ -192,5 +193,5 @@ __weak void Timer2A_Handler ( void ) {
   // Reset 5-second timer
   reset(timer_5s);
   // 5 seconds have elapsed, tick traffic
-  tick_traffic(state, 0, 0);
+  tick_traffic(&state, 0, 0, red, ylw, grn);
 }
