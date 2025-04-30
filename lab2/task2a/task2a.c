@@ -44,6 +44,11 @@ int main(void) {
 
 uint32_t i = 0;
 
+/**
+ * Handles the event trigger when Timer 0A times out. Resets
+ * the timer then switches on D1-D4 sequentially such that
+ * all LEDs turn on then off in a periodic manner.
+ */
 #pragma call_graph_root = "interrupt"
 __weak void Timer0A_Handler ( void ) { 
   // Reset Timer 0A
