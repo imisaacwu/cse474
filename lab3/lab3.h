@@ -11,14 +11,17 @@
 // Register Definitions
 
 // Main Clock Gating Control Registers
-#define RCGCGPIO    (*((volatile uint32_t *) 0x400FE608))
 #define RCGCTIMER   (*((volatile uint32_t *) 0x400FE604))
-
+#define RCGCGPIO    (*((volatile uint32_t *) 0x400FE608))
+#define RCGCADC     (*((volatile uint32_t *) 0x400FE638))
+   
 // GPIO Register Macros
 #define GPIODATA(X)     (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x3FC)))
 #define GPIODIR(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x400)))
 #define GPIORIS(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x414)))
+#define GPIOAFSEL(X)    (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x420)))
 #define GPIODEN(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x51C)))
+#define GPIOAMSEL(X)    (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x528)))
 
 // GPIO Port Bases
 #define GPIO_A_BASE     0x40058000
@@ -36,5 +39,43 @@
 #define GPIO_N_BASE     0x40064000
 #define GPIO_P_BASE     0x40065000
 #define GPIO_Q_BASE     0x40066000
+
+// Timer Macros
+#define GPTMCFG(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x000)))
+#define GPTMTAMR(X)     (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x004)))
+#define GPTMCTL(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x00C)))
+#define GPTMIMR(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x018)))
+#define GPTMRIS(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x01C)))
+#define GPTMICR(X)      (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x024)))
+#define GPTMTAILR(X)    (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x028)))
+#define GPTMADCEV(X)    (*((volatile uint32_t *) (TIMER_ ## X ## _BASE + 0x070)))
+
+// Timer Bases
+#define TIMER_0_BASE    0x40030000
+#define TIMER_1_BASE    0x40031000
+#define TIMER_2_BASE    0x40032000
+#define TIMER_3_BASE    0x40033000
+#define TIMER_4_BASE    0x40034000
+#define TIMER_5_BASE    0x40035000
+#define TIMER_6_BASE    0x400E0000
+#define TIMER_7_BASE    0x400E1000
+
+// More Timer Macros
+#define CLK_FRQ         16000000
+#define TIMER_ONE_SHOT  0x1
+#define TIMER_PERIODIC  0x2
+#define TIMER_CAPTURE   0x3
+
+// Registers for ADC
+#define ADCACTSS_0  (*((volatile uint32_t *) 0x40038000))
+#define ADCIM_0     (*((volatile uint32_t *) 0x40038008))
+#define ADCEMUX_0   (*((volatile uint32_t *) 0x40038014))
+#define ADCSSMUX3   (*((volatile uint32_t *) 0x400380A0))
+#define ADCSSCTL3   (*((volatile uint32_t *) 0x400380A4))
+#define ADCSSEMUX3  (*((volatile uint32_t *) 0x400380B8))
+#define ADCCC_0     (*((volatile uint32_t *) 0x40038FC8))
+
+// Registers for NVIC
+#define NVIC_EN1    (*((volatile uint32_t *) 0xE000E104))
 
 #endif  // LAB3_H_
