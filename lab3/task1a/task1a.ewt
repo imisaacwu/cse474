@@ -2322,4 +2322,7 @@
     <file>
         <name>$PROJ_DIR$\Lab3_Task1a.c</name>
     </file>
+    <file>
+        <name>$PROJ_DIR$\..\timer.c</name>
+    </file>
 </project>
