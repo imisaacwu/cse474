@@ -46,10 +46,5 @@ Backup*
 # IAR .dep files
 *.dep
 
-# IAR project files
-*.ewd
-*.ewp
-*.ewt
-
 # MacOS metadata
 .DS_Store
