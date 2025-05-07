@@ -29,6 +29,7 @@ extern void PendSV_Handler( void );
 extern void SysTick_Handler( void );
 
 extern void ADC0SS3_Handler( void );
+extern void PortJ_Handler ( void );
 
 
 
@@ -81,7 +82,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  ADC0SS3_Handler,                        // ADC Sequence 3
+  ADC0SS3_Handler,                        // ADC0 Sequence 3
   0,
   0,
   0,
@@ -115,7 +116,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  0,
+  PortJ_Handler,
   0,
   0,
   0,

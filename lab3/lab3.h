@@ -1,4 +1,4 @@
-/**
+ /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * Apr. 29, 2025
@@ -18,9 +18,23 @@
 // GPIO Register Macros
 #define GPIODATA(X)     (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x3FC)))
 #define GPIODIR(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x400)))
+#define GPIOIS(X)       (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x404)))
+#define GPIOIBE(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x408)))
+#define GPIOIEV(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x40C)))
+
+#define GPIOIM(X)       (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x410)))
+
 #define GPIORIS(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x414)))
+#define GPIOICR(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x41C)))
+
 #define GPIOAFSEL(X)    (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x420)))
+
+#define GPIOPUR(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x510)))
 #define GPIODEN(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x51C)))
+
+#define GPIOLOCK(X)     (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x520)))
+#define GPIOCR(X)       (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x524)))
+
 #define GPIOAMSEL(X)    (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x528)))
 
 // GPIO Port Bases
@@ -83,10 +97,13 @@
 // Registers for NVIC
 #define NVIC_EN0    (*((volatile uint32_t *) 0xE000E100))
 #define NVIC_EN1    (*((volatile uint32_t *) 0xE000E104))
+#define NVIC_PRI12  (*((volatile uint32_t *) 0xE000E430))
 
 
 // Additional Macros
-
+// Macros to unlock and lock GPIO_LOCK registers
+#define UNLOCK      0x4C4F434B
+#define LOCK        0x0
 #define BIT(N)  (0x1 << N)
 
 #endif  // LAB3_H_
