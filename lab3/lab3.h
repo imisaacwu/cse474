@@ -71,10 +71,13 @@
 #define ADCIM_0         (*((volatile uint32_t *) 0x40038008))
 #define ADCISC_0        (*((volatile uint32_t *) 0x4003800C))
 #define ADCEMUX_0       (*((volatile uint32_t *) 0x40038014))
+
 #define ADCSSMUX3_0     (*((volatile uint32_t *) 0x400380A0))
 #define ADCSSCTL3_0     (*((volatile uint32_t *) 0x400380A4))
 #define ADCSSFIFO3_0    (*((volatile uint32_t *) 0x400380A8))
 #define ADCSSEMUX3_0    (*((volatile uint32_t *) 0x400380B8))
+#define ADCSSTSH3_0     (*((volatile uint32_t *) 0x400380BC))
+
 #define ADCCC_0         (*((volatile uint32_t *) 0x40038FC8))
 
 // Registers for NVIC

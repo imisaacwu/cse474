@@ -755,7 +755,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>lnk0t.icf</state>
+                    <state>$TOOLKIT_DIR$\config\linker\TexasInstruments\TM4C1294NC.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -815,7 +815,7 @@
                 </option>
                 <option>
                     <name>IlinkProgramEntryLabel</name>
-                    <state></state>
+                    <state>__iar_program_start</state>
                 </option>
                 <option>
                     <name>DoFill</name>
@@ -2029,4 +2029,16 @@
             <data />
         </settings>
     </configuration>
+    <file>
+        <name>$PROJ_DIR$\cstartup_M.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\Lab3_Inits.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\task1b.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\timer.c</name>
+    </file>
 </project>

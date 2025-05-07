@@ -117,6 +117,27 @@ void ADCReadPot_Init(void) {
   NVIC_EN0 |= (0x1 << 17);
   // 2.17: Enable ADC0 SS3
   ADCACTSS_0 |= 0x8;
+} 
+
+void ADCReadTemp_Init(void) {
+  volatile unsigned short delay = 0;
+  RCGCADC |= 0x1;               // Enable ADC0 clock
+  delay++;
+  delay++;
+  
+  PLLFREQ0 |= 0x00800000;       // Power up the PLL
+  while (PLLSTAT != 0x1);       // Wait for PLL to lock
+  ADCCC_0 |= 0x1;               // Configure ADCCC to use the clock source defined by ALTCLKCFG
+  
+  // something something
+  
+  ADCACTSS_0 &= ~0x8;                           // Disable sample sequencer 3
+  ADCEMUX_0 |= 0x5000;                          // Select timer as the trigger for SS3
+  ADCSSTSH3_0 = (ADCSSTSH3_0 & ~0xF) | 0x4;     // Set sample and hold width to 16 ADC clocks
+  ADCSSCTL3_0 |= 0xE;                           // Configure ADCSSCTL3 register
+  ADCIM_0 |= 0x8;                               // Set the SS3 interrupt mask
+  NVIC_EN0 |= (0x1 << 17);                      // Set the corresponding bit for ADC0 SS3 in NVIC
+  ADCACTSS_0 |= 0x8;                            // Enable ADC0 SS3
 }
 
 void TimerADCTriger_Init(void) {
