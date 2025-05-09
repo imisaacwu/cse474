@@ -13,6 +13,7 @@
 // Main Clock Gating Control Registers
 #define RCGCTIMER   (*((volatile uint32_t *) 0x400FE604))
 #define RCGCGPIO    (*((volatile uint32_t *) 0x400FE608))
+#define RCGCUART    (*((volatile uint32_t *) 0x400FE618))
 #define RCGCADC     (*((volatile uint32_t *) 0x400FE638))
    
 // GPIO Register Macros
@@ -30,6 +31,7 @@
 #define GPIOLOCK(X)     (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x520)))
 #define GPIOCR(X)       (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x524)))
 #define GPIOAMSEL(X)    (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x528)))
+#define GPIOPCTL(X)     (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x52C)))
 
 // GPIO Port Bases
 #define GPIO_A_BASE     0x40058000
@@ -85,6 +87,14 @@
 #define ADCSSEMUX3_0    (*((volatile uint32_t *) 0x400380B8))
 #define ADCSSTSH3_0     (*((volatile uint32_t *) 0x400380BC))
 #define ADCCC_0         (*((volatile uint32_t *) 0x40038FC8))
+
+// Registers for UART
+#define UARTDR_0        (*((volatile uint32_t *) 0x4000C000))
+#define UARTFR_0        (*((volatile uint32_t *) 0x4000C018))
+#define UARTIBRD_0      (*((volatile uint32_t *) 0x4000C024))
+#define UARTFBRD_0      (*((volatile uint32_t *) 0x4000C028))
+#define UARTLCRH_0      (*((volatile uint32_t *) 0x4000C02C))
+#define UARTCTL_0       (*((volatile uint32_t *) 0x4000C030))
 
 // Registers for the NVIC
 #define NVIC_EN0    (*((volatile uint32_t *) 0xE000E100))
