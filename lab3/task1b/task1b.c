@@ -1,27 +1,32 @@
 /**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * May 15, 2025
  * EE/CSE 474: Lab3 Task1b main function
  */
 
 #include <stdint.h>
-#include <stdio.h>
+#include <stdio.h>  // printf()
 
 #include "../Lab3_Inits.h"
 #include "../lab3.h"
 
-const float VREFP = 3.3;
-const float VREFN = 0.0;
-
+const float VREFP = 3.3;  // Voltage Reference Positive
+const float VREFN = 0.0;  // Voltage Reference Negative
 uint32_t ADC_value;
+
 // Configures necessary ports
 void config_ports();
+
 int main(void) {
   // Select system clock frequency preset
   config_ports();
-  enum frequency freq = PRESET2; // 60 MHz
-  PLL_Init(freq);        // Set system clock frequency to 60 MHz
-  LED_Init();            // Initialize the 4 onboard LEDs (GPIO)
-  ADCReadTemp_Init();     // Initialize ADC0 to read from the temperature sensor
-  TimerADCTriger_Init(); // Initialize Timer0A to trigger ADC0
+
+  enum frequency freq = PRESET2;  // 60 MHz
+  PLL_Init(freq);                 // Set system clock frequency to 60 MHz
+  LED_Init();                     // Initialize the 4 onboard LEDs (GPIO)
+  ADCReadTemp_Init();             // Initialize ADC0 to read from the temperature sensor
+  TimerADCTriger_Init();          // Initialize Timer0A to trigger ADC0
   
   float temperature;
   
@@ -31,14 +36,6 @@ int main(void) {
   }
   
   return 0;
-}
-
-#pragma call_graph_root = "interrupt"
-__weak void ADC0SS3_Handler(void) {
-  // Clear the ADC0 interrupt flag
-  ADCISC_0 = 0x8;
-  // Save the ADC value to global variable ADC_value
-  ADC_value = (ADCSSFIFO3_0 & 0xFFF);
 }
 
 void config_ports() {
@@ -69,12 +66,24 @@ void config_ports() {
 }
 
 /**
+ * Called by NVIC whenever Timer0A times out. Stores the result
+ * of samples collected by Sequencer 3 into our global ADC_value
+ */
+#pragma call_graph_root = "interrupt"
+__weak void ADC0SS3_Handler(void) {
+  // Clear the ADC0 interrupt flag
+  ADCISC_0 = 0x8;
+  // Save the ADC value to global variable ADC_value
+  ADC_value = (ADCSSFIFO3_0 & 0xFFF);
+}
+
+/**
  * Method that handles rising edges on Port J
  * Called by NVIC when any GPIO on Port J has a rising edge
  * Will clear the interrupt status (i.e. allow for more interrupts)
- * If button SW1 was pressed, will stop the flashing of LED1 and turn
- * on LED 2. If button SW2 was pressed, will re-enable the flashing of
- * LED1 if previously disabled and turn off LED 2.
+ *
+ * If button SW1 is pressed, will switch the clock frequency to 12 MHz
+ * If button SW2 is pressed, will switch the clock frequency to 120 MHz
  */
 #pragma call_graph_root = "interrupt"
 __weak void PortJ_Handler ( void ) {

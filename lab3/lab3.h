@@ -1,8 +1,8 @@
  /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 29, 2025
- * Header file for Lab 3
+ * May 15, 2025
+ * Header file containing register definitions for Lab 3
  */
 
 #ifndef LAB3_H_
@@ -21,20 +21,14 @@
 #define GPIOIS(X)       (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x404)))
 #define GPIOIBE(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x408)))
 #define GPIOIEV(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x40C)))
-
 #define GPIOIM(X)       (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x410)))
-
 #define GPIORIS(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x414)))
 #define GPIOICR(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x41C)))
-
 #define GPIOAFSEL(X)    (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x420)))
-
 #define GPIOPUR(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x510)))
 #define GPIODEN(X)      (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x51C)))
-
 #define GPIOLOCK(X)     (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x520)))
 #define GPIOCR(X)       (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x524)))
-
 #define GPIOAMSEL(X)    (*((volatile uint32_t *) (GPIO_ ## X ## _BASE + 0x528)))
 
 // GPIO Port Bases
@@ -85,22 +79,20 @@
 #define ADCIM_0         (*((volatile uint32_t *) 0x40038008))
 #define ADCISC_0        (*((volatile uint32_t *) 0x4003800C))
 #define ADCEMUX_0       (*((volatile uint32_t *) 0x40038014))
-
 #define ADCSSMUX3_0     (*((volatile uint32_t *) 0x400380A0))
 #define ADCSSCTL3_0     (*((volatile uint32_t *) 0x400380A4))
 #define ADCSSFIFO3_0    (*((volatile uint32_t *) 0x400380A8))
 #define ADCSSEMUX3_0    (*((volatile uint32_t *) 0x400380B8))
 #define ADCSSTSH3_0     (*((volatile uint32_t *) 0x400380BC))
-
 #define ADCCC_0         (*((volatile uint32_t *) 0x40038FC8))
 
-// Registers for NVIC
+// Registers for the NVIC
 #define NVIC_EN0    (*((volatile uint32_t *) 0xE000E100))
 #define NVIC_EN1    (*((volatile uint32_t *) 0xE000E104))
 #define NVIC_PRI12  (*((volatile uint32_t *) 0xE000E430))
 
-
 // Additional Macros
+
 // Macros to unlock and lock GPIO_LOCK registers
 #define UNLOCK      0x4C4F434B
 #define LOCK        0x0

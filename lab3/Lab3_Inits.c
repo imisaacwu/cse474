@@ -1,4 +1,7 @@
 /**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * May 15, 2025
  * EE/CSE 474: Lab3 drivers starter code
  */
 
@@ -129,8 +132,6 @@ void ADCReadTemp_Init(void) {
   while (PLLSTAT != 0x1);       // Wait for PLL to lock
   ADCCC_0 |= 0x1;               // Configure ADCCC to use the clock source defined by ALTCLKCFG
   
-  // something something
-  
   ADCACTSS_0 &= ~0x8;                           // Disable sample sequencer 3
   ADCEMUX_0 |= 0x5000;                          // Select timer as the trigger for SS3
   ADCSSTSH3_0 = (ADCSSTSH3_0 & ~0xF) | 0x4;     // Set sample and hold width to 16 ADC clocks
@@ -155,7 +156,7 @@ void TimerADCTriger_Init(void) {
   init(timer);
   GPTMCTL(0) |= 0x20;   // Enable Timer A as an ADC trigger
   GPTMADCEV(0) |= 0x1;  // Enable Timer A time-out to trigger ADC
-  enable(timer);
+  enable(timer);        // Start timer
 }
 
 // NEXT STEP: Go to Lab3_Task1a.c and finish implementing ADC0SS3_Handler

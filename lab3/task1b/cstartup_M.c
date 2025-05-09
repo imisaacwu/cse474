@@ -82,7 +82,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  ADC0SS3_Handler,                        // ADC0 Sequence 3
+  ADC0SS3_Handler,                        // ADC Sequence 3
   0,
   0,
   0,
