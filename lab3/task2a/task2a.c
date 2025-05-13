@@ -15,11 +15,13 @@
 const float VREFP = 3.3;  // Voltage Reference Positive
 const float VREFN = 0.0;  // Voltage Reference Negative
 uint32_t ADC_value;
+char message[100];
+int i;
 
 // Configures necessary ports
 void config_ports();
 
-int main(void) {
+ int main(void) {
   // Select system clock frequency preset
   config_ports();
 
@@ -33,8 +35,17 @@ int main(void) {
   
   while(1) {
     temperature = 147.5 - ((75 * (VREFP - VREFN) * ADC_value) / 4096);
-    printf("Temp: %.2f C\n", temperature);
-    snprintf((char *) &UARTDR_0, 16, "Temp: %.2f C\n", temperature);
+    sprintf(message, "Temp: %.2f C\n", temperature);
+    printf(message);
+    
+    for (i = 0; i < sizeof(message); i++) {
+      while ((UARTFR_0 & 0x8) == 1);
+      UARTDR_0 = message[i];
+      //printf("%c", message[i]);
+      //printf("%d ", (uint32_t) message[i]);
+
+    }
+    //printf("\n");
   }
   
   return 0;
@@ -74,20 +85,27 @@ void config_ports() {
   GPIOCR(A) &= ~0x3;            // Disable writing
   GPIOLOCK(A) = LOCK;           // Lock the GPIOCR register
   GPIOPCTL(A) |= 0x11;          // Set PA0/PA1 to UART 0 Rx/Tx
+  GPIODEN(A) |= 0x3;            // Enable digital function for PA0 & PA1
   
   // Configure UART
   UARTCTL_0 &= ~0x1;
   while (UARTFR_0 & 0x8);       // Wait for transmit/receive to complete
-  UARTLCRH_0 &= ~0x10;            // Flush transmit FIFO
+  UARTLCRH_0 &= ~0x10;          // Flush transmit FIFO
   
+  // Set UART to use the Alternate Clock Source from (ALTCLKCFG)
+  UARTCC_0 |= 0x5;
+
+  // Using SysClk=16 MHz??
   // We want the baud rate to be 9600 with ClkDiv=16 and UARTSysClk=60MHz
   // So we need BRDI=390 and BRDF=0.625 -> integer(0.625 * 64 + 0.5) = 40
-  UARTIBRD_0 = 390;
-  UARTFBRD_0 = 40;
+  UARTIBRD_0 = 104;
+  UARTFBRD_0 = 11;
   // Write to UARTLCRH_0 to update baud rate configs, keep default settings
   UARTLCRH_0 = 0;
+  // Set UART Word Length to 8 bits
+  UARTLCRH_0 |= 0x60;
   // Enable UART FIFOs
-  UARTLCRH_0 |= BIT(4);
+  // UARTLCRH_0 |= 0x10;
   
   // Enable UART
   UARTCTL_0 |= 0x1;

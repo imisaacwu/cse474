@@ -95,6 +95,7 @@
 #define UARTFBRD_0      (*((volatile uint32_t *) 0x4000C028))
 #define UARTLCRH_0      (*((volatile uint32_t *) 0x4000C02C))
 #define UARTCTL_0       (*((volatile uint32_t *) 0x4000C030))
+#define UARTCC_0        (*((volatile uint32_t *) 0x4000CFC8))
 
 // Registers for the NVIC
 #define NVIC_EN0    (*((volatile uint32_t *) 0xE000E100))
