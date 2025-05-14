@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stdio.h>  // printf()
+#include <string.h> // strlen
 
 #include "../Lab3_Inits.h"
 #include "../lab3.h"
@@ -21,13 +22,12 @@ int i;
 // Configures necessary ports
 void config_ports();
 
- int main(void) {
+int main(void) {
   // Select system clock frequency preset
   config_ports();
 
   enum frequency freq = PRESET2;  // 60 MHz
   PLL_Init(freq);                 // Set system clock frequency to 60 MHz
-  LED_Init();                     // Initialize the 4 onboard LEDs (GPIO)
   ADCReadTemp_Init();             // Initialize ADC0 to read from the temperature sensor
   TimerADCTriger_Init();          // Initialize Timer0A to trigger ADC0
   
@@ -38,14 +38,10 @@ void config_ports();
     sprintf(message, "Temp: %.2f C\n", temperature);
     printf(message);
     
-    for (i = 0; i < sizeof(message); i++) {
-      while ((UARTFR_0 & 0x8) == 1);
-      UARTDR_0 = message[i];
-      //printf("%c", message[i]);
-      //printf("%d ", (uint32_t) message[i]);
-
+    for (i = 0; i < strlen(message); i++) {
+      while ((UARTFR(0) & (1 << 5)));
+      UARTDR(0) = message[i];
     }
-    //printf("\n");
   }
   
   return 0;
@@ -88,27 +84,26 @@ void config_ports() {
   GPIODEN(A) |= 0x3;            // Enable digital function for PA0 & PA1
   
   // Configure UART
-  UARTCTL_0 &= ~0x1;
-  while (UARTFR_0 & 0x8);       // Wait for transmit/receive to complete
-  UARTLCRH_0 &= ~0x10;          // Flush transmit FIFO
+  UARTCTL(0) &= ~0x1;
+  //while (UARTFR_0 & 0x8);       // Wait for transmit/receive to complete
+  //UARTLCRH_0 &= ~0x10;          // Flush transmit FIFO
   
   // Set UART to use the Alternate Clock Source from (ALTCLKCFG)
-  UARTCC_0 |= 0x5;
+  UARTCC(0) |= 0x5;
 
-  // Using SysClk=16 MHz??
-  // We want the baud rate to be 9600 with ClkDiv=16 and UARTSysClk=60MHz
-  // So we need BRDI=390 and BRDF=0.625 -> integer(0.625 * 64 + 0.5) = 40
-  UARTIBRD_0 = 104;
-  UARTFBRD_0 = 11;
+  // We want the baud rate to be 9600 with ClkDiv=16 and UARTSysClk=16MHz
+  // So we need BRDI=104 and BRDF=0.16... -> integer(0.16... * 64 + 0.5) = 11
+  UARTIBRD(0) = 104;
+  UARTFBRD(0) = 11;
   // Write to UARTLCRH_0 to update baud rate configs, keep default settings
-  UARTLCRH_0 = 0;
+  //UARTLCRH_0 = 0;
   // Set UART Word Length to 8 bits
-  UARTLCRH_0 |= 0x60;
+  UARTLCRH(0) |= 0x60;
   // Enable UART FIFOs
   // UARTLCRH_0 |= 0x10;
   
   // Enable UART
-  UARTCTL_0 |= 0x1;
+  UARTCTL(0) |= 0x1;
 }
 
 /**

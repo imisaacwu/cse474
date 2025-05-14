@@ -89,13 +89,17 @@
 #define ADCCC_0         (*((volatile uint32_t *) 0x40038FC8))
 
 // Registers for UART
-#define UARTDR_0        (*((volatile uint32_t *) 0x4000C000))
-#define UARTFR_0        (*((volatile uint32_t *) 0x4000C018))
-#define UARTIBRD_0      (*((volatile uint32_t *) 0x4000C024))
-#define UARTFBRD_0      (*((volatile uint32_t *) 0x4000C028))
-#define UARTLCRH_0      (*((volatile uint32_t *) 0x4000C02C))
-#define UARTCTL_0       (*((volatile uint32_t *) 0x4000C030))
-#define UARTCC_0        (*((volatile uint32_t *) 0x4000CFC8))
+#define UARTDR(X)       (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x000)))
+#define UARTFR(X)       (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x018)))
+#define UARTIBRD(X)     (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x024)))
+#define UARTFBRD(X)     (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x028)))
+#define UARTLCRH(X)     (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x02C)))
+#define UARTCTL(X)      (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x030)))
+#define UARTCC(X)       (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0xFC8)))
+
+// UART Bases
+#define UART_0_BASE    0x4000C000
+#define UART_3_BASE    0x4000F000
 
 // Registers for the NVIC
 #define NVIC_EN0    (*((volatile uint32_t *) 0xE000E100))
