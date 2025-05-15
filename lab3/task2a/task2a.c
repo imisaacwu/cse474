@@ -18,7 +18,7 @@
 const float VREFP = 3.3;  // Voltage Reference Positive
 const float VREFN = 0.0;  // Voltage Reference Negative
 uint32_t ADC_value;
-char message[100];
+char message[100];        // Stores temperature read
 int i;
 
 // Configures necessary ports
@@ -36,12 +36,15 @@ int main(void) {
   float temperature;
   
   while(1) {
+    // Calculate temperature per Figure 15-11 on datasheet
     temperature = 147.5 - ((75 * (VREFP - VREFN) * ADC_value) / 4096);
     sprintf(message, "Temp: %.2f C\n", temperature);
     printf(message);
     
     for (i = 0; i < strlen(message); i++) {
+      // Wait while the transmit holding register is full 
       while ((UARTFR(0) & (1 << 5)));
+      // Else, load register with next char to transmit to Terminal I/O
       UARTDR(0) = message[i];
     }
   }
@@ -56,26 +59,6 @@ void config_ports() {
   delay++;
   delay++;
   
-  GPIODIR(J) &= ~0x3;           // Set PJ0 (SW1) and PJ1 (SW2) as inputs
-  GPIODEN(J) |= 0x3;            // Set PJ0 and PJ1 to digital ports
-
-  GPIOLOCK(J) = UNLOCK;         // Unlock the GPIOCR register
-  GPIOCR(J) |= 0x3;             // Enable writing to GPIOPUR
-  GPIOPUR(J) |= 0x3;            // Enable PJ0 and PJ1's weak pull-up resistor
-  GPIOCR(J) &= ~0x3;            // Disable writing
-  GPIOLOCK(J) = LOCK;           // Lock the GPIOCR register
-  
-  // Config interrupts for Port J
-  GPIOIM(J) &= ~0x3;            // Disable GPIO interrupts for PJ0 and PJ1
-  GPIOIS(J) &= ~0x3;            // Makes PJ0 and PJ1 edge-sensitive
-  GPIOIBE(J) &= ~0x3;           // Trigger on single edge
-  GPIOIEV(J) &= ~0x3;           // Trigger on the rising edge
-  GPIOICR(J) |= 0x3;            // Clearing prior interrupt status
-  GPIOIM(J) |= 0x3;             // Re-enable GPIO interrupts for PJ0 and PJ1
-
-  NVIC_EN1 |= 0x80000;          // Enable interrupt number 51
-  NVIC_PRI12 |= 0x70000000;     // Set priority of interrupt 51 to 7
-  
   // Configure UART 0 Rx/Tx on Port A
   GPIOLOCK(A) = UNLOCK;         // Unlock the GPIOCR register
   GPIOCR(A) |= 0x3;             // Enable writing to GPIOAFSEL
@@ -87,8 +70,6 @@ void config_ports() {
   
   // Configure UART
   UARTCTL(0) &= ~0x1;
-  //while (UARTFR_0 & 0x8);       // Wait for transmit/receive to complete
-  //UARTLCRH_0 &= ~0x10;          // Flush transmit FIFO
   
   // Set UART to use the Alternate Clock Source from (ALTCLKCFG)
   UARTCC(0) |= 0x5;
@@ -97,12 +78,8 @@ void config_ports() {
   // So we need BRDI=104 and BRDF=0.16... -> integer(0.16... * 64 + 0.5) = 11
   UARTIBRD(0) = 104;
   UARTFBRD(0) = 11;
-  // Write to UARTLCRH_0 to update baud rate configs, keep default settings
-  //UARTLCRH_0 = 0;
   // Set UART Word Length to 8 bits
   UARTLCRH(0) |= 0x60;
-  // Enable UART FIFOs
-  // UARTLCRH_0 |= 0x10;
   
   // Enable UART
   UARTCTL(0) |= 0x1;
@@ -118,27 +95,4 @@ __weak void ADC0SS3_Handler(void) {
   ADCISC_0 = 0x8;
   // Save the ADC value to global variable ADC_value
   ADC_value = (ADCSSFIFO3_0 & 0xFFF);
-}
-
-/**
- * Method that handles rising edges on Port J
- * Called by NVIC when any GPIO on Port J has a rising edge
- * Will clear the interrupt status (i.e. allow for more interrupts)
- *
- * If button SW1 is pressed, will switch the clock frequency to 12 MHz
- * If button SW2 is pressed, will switch the clock frequency to 120 MHz
- */
-#pragma call_graph_root = "interrupt"
-__weak void PortJ_Handler ( void ) {
-  // Reset interrupt status
-  GPIOICR(J) |= 0x3;
-  // Check which button was pressed
-  unsigned short sw1 = (GPIODATA(J) & 0x1) == 0;
-  unsigned short sw2 = (GPIODATA(J) & 0x2) == 0;
-
-  if (sw1) {
-    PLL_Init(PRESET3);
-  } else if (sw2) {
-    PLL_Init(PRESET1);
-  }
 }
