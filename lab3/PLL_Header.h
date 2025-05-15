@@ -2,7 +2,7 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * May 15, 2025
- * EE/CSE 474: Lab3 header file
+ * Header file containing registers needed for using PLL
  */
 
 #ifndef _PLL_HEADER_H_

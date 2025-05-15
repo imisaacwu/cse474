@@ -31,6 +31,7 @@ int main(void) {
   float temperature;
   
   while(1) {
+    // Calculate temperature from the read ADC Value
     temperature = 147.5 - ((75 * (VREFP - VREFN) * ADC_value) / 4096);
     printf("Temperature: %f C\n", temperature);
   }

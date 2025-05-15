@@ -1,3 +1,10 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * May 15, 2025
+ * Interrupt Vector Table for Task 1b
+ */
+
 /**************************************************
  *
  * This file contains an interrupt vector for Cortex-M written in C.
@@ -8,10 +15,6 @@
  * $Revision: 112610 $
  *
  **************************************************/
-
-// Note: The ADC0SS3_Handler ISR is set up for you in this file. You
-// should NOT modify this file for task 1a. Make sure that the function
-// name of your ISR matches the declaration in this file.
 
 #pragma language=extended
 #pragma segment="CSTACK"

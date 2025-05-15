@@ -13,15 +13,20 @@
 // Configures necessary ports
 void config_ports();
 
+// Function that will read the given character from UART
+// and returns it back to the sender.
+void return_to_sender(char);
+
 int main(void) {
   // Select system clock frequency preset
   config_ports();
   
   while(1) {
+    // Check if the read register is not empty
     if ((UARTFR(3) & (1 << 6))) {
+      // Read the character
       char c = UARTDR(3);
-      while ((UARTFR(3) & (1 << 5)));
-      UARTDR(3) = c;
+      return_to_sender(c);
     }
   }
   
@@ -65,4 +70,11 @@ void config_ports() {
   
   // Enable UART
   UARTCTL(3) |= 0x1;
+}
+
+void return_to_sender(char c) {
+  // Wait to make sure the transmit register is empty
+  while ((UARTFR(3) & (1 << 5)));
+  // Send the character received
+  UARTDR(3) = c;
 }
