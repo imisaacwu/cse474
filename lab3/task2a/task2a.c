@@ -2,7 +2,9 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * May 15, 2025
- * EE/CSE 474: Lab3 Task2a main function
+ * EE/CSE 474: Lab3 Task2a reads temperature input from
+ * the on-board internal temperature sensor and prints it
+ * to the PuTTY terminal.
  */
 
 #include <stdint.h>

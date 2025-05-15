@@ -145,7 +145,7 @@ void TimerADCTriger_Init(void) {
   // STEP 3: Initialize Timer0A to trigger ADC0 at 1 HZ.
   // Hint: Refer to section 13.3.7 of the datasheet
   volatile unsigned short delay = 0;
-  RCGCTIMER |= 0x1;
+  RCGCTIMER |= 0x1;     // Enable Timer 0
   delay++;
   delay++;
   

@@ -2,7 +2,9 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * May 15, 2025
- * EE/CSE 474: Lab3 Task1a main function
+ * EE/CSE 474: Lab3 Task1a controls LEDS D1-D4 using an
+ * external potentiometer. Increasing the resistance (kΩ),
+ * up to 10kΩ, will result in more LEDs being turned on.
  */
 
 // NOTE: This is the main function for Task 1a. You should start by
