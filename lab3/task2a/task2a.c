@@ -54,8 +54,8 @@ int main(void) {
 
 void config_ports() {
   volatile unsigned short delay = 0;
-  RCGCGPIO |= 0x101;            // Enable port J and A
-  RCGCUART |= 0x1;              // Enable UART 0
+  RCGCGPIO |= 0x1;            // Enable A
+  RCGCUART |= 0x1;            // Enable UART 0
   delay++;
   delay++;
   
