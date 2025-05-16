@@ -1,3 +1,10 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * May 15, 2025
+ * Interrupt Vector Table for Task 2a
+ */
+
 /**************************************************
  *
  * This file contains an interrupt vector for Cortex-M written in C.
