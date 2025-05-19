@@ -2029,4 +2029,28 @@
             <data />
         </settings>
     </configuration>
+    <file>
+        <name>$PROJ_DIR$\cstartup_M.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\Lab4_Inits.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\LED.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\SSD2119_Display.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\SSD2119_Touch.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\task2a.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\timer.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\..\traffic_fsm.c</name>
+    </file>
 </project>

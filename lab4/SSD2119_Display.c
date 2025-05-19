@@ -144,7 +144,7 @@ unsigned short textColor, backgroundColor;
 // bits 15-11 5 bit red
 // bits 10-5  6-bit green
 // bits  4-0  5-bit blue
-const unsigned short Color4[16] = {
+const unsigned short Color4[17] = {
   0,                                            //0  black                   (#000000) 	000000 	0
  ((0x00>>3)<<11) | ((0x00>>2)<<5) | (0xAA>>3),  //1  blue                    (#0000AA) 	000001 	1
  ((0x00>>3)<<11) | ((0xAA>>2)<<5) | (0x00>>3),  //2  green                   (#00AA00) 	000010 	2
@@ -160,7 +160,8 @@ const unsigned short Color4[16] = {
  ((0xFF>>3)<<11) | ((0x55>>2)<<5) | (0x55>>3),  //12 bright red              (#FF5555) 	111100 	60
  ((0xFF>>3)<<11) | ((0x55>>2)<<5) | (0xFF>>3),  //13 bright magenta          (#FF55FF) 	111101 	61
  ((0xFF>>3)<<11) | ((0xFF>>2)<<5) | (0x55>>3),  //14 bright yellow           (#FFFF55) 	111110 	62
- ((0xFF>>3)<<11) | ((0xFF>>2)<<5) | (0xFF>>3)   //15 bright white            (#FFFFFF) 	111111 	63
+ ((0xFF>>3)<<11) | ((0xFF>>2)<<5) | (0xFF>>3),  //15 bright white            (#FFFFFF) 	111111 	63
+ ((0xAA>>3)<<11) | ((0xAA>>2)<<5) | (0x00>>3)   //16 old gold                (#AAAA00)  
 };
 
 // This table contains the hex values that represent pixels

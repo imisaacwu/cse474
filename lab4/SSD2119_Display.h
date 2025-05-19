@@ -7,7 +7,7 @@
 #define __SSD2119_DISPLAY_H__
 
 // exported constant
-extern const unsigned short Color4[16];
+extern const unsigned short Color4[17];
 
 // ************** LCD_Init ********************************
 // - Initializes the LCD
