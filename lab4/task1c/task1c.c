@@ -15,6 +15,9 @@ const int center_x_12 = 1400;
 const int center_x_120 = 1860;
 const int center_y = 780;
 
+/**
+ * Header to fill
+ */
 float dist(int x1, int x2, int y1, int y2);
 
 int main() {

@@ -47,6 +47,15 @@ struct Timer timer_5s = {
   &TIMER2_TAILR_R, &TIMER2_RIS_R, &TIMER2_ICR_R
 };
 
+const int center_x_pwr = 1300;
+const int center_x_ped = 1780;
+const int center_y = 780;
+
+/**
+ * Header to fill
+ */
+float dist(int x1, int x2, int y1, int y2);
+
 int main() {
   freq = PRESET2;               // 60 MHz
   PLL_Init(freq);               // Set system clock frequency to 60 MHz
@@ -54,10 +63,16 @@ int main() {
   LCD_Init();
   Touch_Init();
   
-  SYSCTL_RCGCTIMER_R |= 0x7;             // Enable Timers 0-2
-
+  LCD_DrawFilledCircle(105, 200, 30, Color4[5]);
+  LCD_SetCursor(95, 195);
+  LCD_PrintString("pwr");
+  
+  LCD_DrawFilledCircle(215, 200, 30, Color4[5]);
+  LCD_SetCursor(205, 195);
+  LCD_PrintString("ped");
   
   // Configure timers & their interrupts
+  SYSCTL_RCGCTIMER_R |= 0x7;             // Enable Timers 0-2
   init(timer_pwr);
   TIMER0_IMR_R |= 0x1;    // Enable interrupt on time-out
   NVIC_EN0_R |= 0x80000;  // Enable interrupt number 19
@@ -70,19 +85,43 @@ int main() {
   TIMER2_IMR_R |= 0x1;    // Enable interrupt on time-out
   NVIC_EN0_R |= 0x800000; // Enable interrupt number 23
   
-  on(red);
+  off(red);
   off(ylw);
   off(grn);
 
-  state = Stop;
-  enable(timer_5s);
+  state = Off;
+  
+  unsigned long x, y;
 
   while (1) {
     // Poll touch location
+    x = Touch_ReadX();
+    y = Touch_ReadY();
     // Do button logic
+    if (dist(center_x_pwr, x, center_y, y) <= 130) {
+      // start 2-sec power timer
+      enable(timer_pwr);
+    } else if (isEnabled(timer_pwr)) {
+      disable(timer_pwr);
+      init(timer_pwr);
+    }
+    
+    if (dist(center_x_ped, x, center_y, y) <= 130) {
+      // start 2-sec power timer
+      enable(timer_ped);
+    } else if (isEnabled(timer_ped)) {
+      disable(timer_ped);
+      init(timer_ped);
+    }
   }
   
   return 0;
+}
+
+float dist(int x1, int x2, int y1, int y2) {
+  float x_dist = (x2 - x1) * (x2 - x1);
+  float y_dist = (y2 - y1) * (y2 - y1);
+  return sqrt(x_dist + y_dist);
 }
 
 /**
@@ -123,8 +162,9 @@ __weak void Timer1A_Handler ( void ) {
   // Pedestrian button was just held for 2 seconds
   // Reset interrupt status (start counting again)
   reset(timer_ped);   
-
-  tick_traffic(&state, 0, 1, red, ylw, grn);
+  if (state == Go) {
+    tick_traffic(&state, 0, 1, red, ylw, grn);
+  }
   
   if (state == Warn) {
     // Ped moved the state to Warn, reset the timer before going to Stop
@@ -143,6 +183,11 @@ __weak void Timer1A_Handler ( void ) {
 __weak void Timer2A_Handler ( void ) {
   // Reset 5-second timer
   reset(timer_5s);
+  if (isEnabled(timer_ped)) {
+    disable(timer_ped);
+    init(timer_ped);
+    enable(timer_ped);
+  }
   // 5 seconds have elapsed, tick traffic
   tick_traffic(&state, 0, 0, red, ylw, grn);
 }
