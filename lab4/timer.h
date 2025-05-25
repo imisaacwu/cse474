@@ -1,7 +1,7 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 29, 2025
+ * May 25, 2025
  * Header file for Timers
  */
 
@@ -10,6 +10,12 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+
+// Timer macros
+#define CLK_FRQ         16000000
+#define TIMER_ONE_SHOT  0x1
+#define TIMER_PERIODIC  0x2
+#define TIMER_CAPTURE   0x3
 
 // Represents a Timer, specified by its number
 struct Timer {

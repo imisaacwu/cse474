@@ -1,15 +1,14 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * May 15, 2025
- * EE/CSE 474: Lab3 drivers starter code
+ * May 25, 2025
+ * EE/CSE 474: Lab4 drivers starter code
  */
 
 #include "PLL_Header.h"
 #include "Lab4_Inits.h"
 
 // STEP 0a: Include your header file here
-// YOUR CUSTOM HEADER FILE HERE
 #include "timer.h"
 #include "tm4c1294ncpdt.h"
 
