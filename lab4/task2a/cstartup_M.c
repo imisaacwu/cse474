@@ -2,7 +2,7 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * May 15, 2025
- * Interrupt Vector Table for Task 1b
+ * Interrupt Vector Table for Task 2a
  */
 
 /**************************************************
@@ -83,13 +83,13 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  0,                        // ADC Sequence 3
   0,
-  Timer0A_Handler,
   0,
-  Timer1A_Handler,
+  Timer0A_Handler                         // Timer 0A handler
   0,
-  Timer2A_Handler,
+  Timer1A_Handler,                        // Timer 1A handler
+  0,
+  Timer2A_Handler,                        // Timer 2A handler
   0,
   0,
   0,
