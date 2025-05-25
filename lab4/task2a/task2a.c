@@ -1,3 +1,12 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * May 25, 2025
+ * Main file for Task 2a
+ * Implements a traffic light controller system
+ * using virtual LEDs and buttons on the LCD screen
+ */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <math.h>
