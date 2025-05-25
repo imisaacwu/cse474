@@ -1,7 +1,7 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * Apr. 14, 2025
+ * May 25, 2025
  * Header file for LEDs
  */
 
@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-// Represents an LED connected to a specific GPIO pin.
+// Represents a virtual LED that can be drawn to a LCD screen
 struct LED {
   unsigned short x;
   unsigned short y;
