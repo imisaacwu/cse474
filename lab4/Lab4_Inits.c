@@ -52,9 +52,9 @@ int PLL_Init(enum frequency freq) {
             return -1;
     }
 
-    RSCLKCFG |= (0x1 << 30);                // Enable new PLL settings
-    PLLFREQ0 |= (0x1 << 23);                // Power up PLL
-    while ((PLLSTAT & 0x1) == 0) {};        // Wait for PLL to lock and stabilize
+    RSCLKCFG |= (0x1 << 30);                 // Enable new PLL settings
+    PLLFREQ0 |= (0x1 << 23);                 // Power up PLL
+    while ((PLLSTAT & 0x1) == 0) {};         // Wait for PLL to lock and stabilize
 
     RSCLKCFG |= (0x1u << 31) | (0x1 << 28);  // Use PLL and update Memory Timing Register
     return 1;
@@ -93,5 +93,5 @@ void TimerADCTriger_Init(void) {
   init(timer);
   TIMER0_CTL_R |= 0x20;   // Enable Timer A as an ADC trigger
   TIMER0_ADCEV_R |= 0x1;  // Enable Timer A time-out to trigger ADC
-  enable(timer);        // Start timer
+  enable(timer);          // Start timer
 }
