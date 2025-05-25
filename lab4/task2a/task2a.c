@@ -1,3 +1,15 @@
+/**
+ * Richie Doan, Isaac Wu
+ * 2169931, 2360957
+ * May 25, 2025
+ * EE/CSE 474: Lab4 Task2a implements a traffic light
+ * controller system using virtual LEDs and buttons on a LCD screen.
+ * Users can hold down the power button to trigger the system on, starting
+ * at the red light. Time-outs will trigger the system to go between green
+ * and red. At the green light, users can press the pedestrian button to
+ * trigger the yellow light before going to the red light.
+ */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <math.h>
@@ -10,17 +22,7 @@
 #include "../timer.h"
 #include "../traffic_fsm.h"
 
-#define grnOff ((0x00>>3)<<11) | ((0xAA>>2)<<5) | (0x00>>3)
-#define redOff ((0xAA>>3)<<11) | ((0x00>>2)<<5) | (0x00>>3)
-#define grnOn ((0x55>>3)<<11) | ((0xFF>>2)<<5) | (0x55>>3)
-#define redOn ((0xFF>>3)<<11) | ((0x55>>2)<<5) | (0x55>>3)
-#define ylwOn ((0xFF>>3)<<11) | ((0xFF>>2)<<5) | (0x55>>3)
-#define ylwOff ((0xAA>>3)<<11) | ((0xAA>>2)<<5) | (0x00>>3)
-
-#define TIMER_PERIODIC 0x2
-#define CLK_FRQ 60000000
-
-// Connect configured Port C pins to LEDs
+// Global virtual LEDs
 struct LED red = {50, 50, 50, &Color4[12], &Color4[4]};
 struct LED ylw = {160, 50, 50, &Color4[14], &Color4[16]};
 struct LED grn = {270, 50, 50, &Color4[10], &Color4[2]};
@@ -47,26 +49,28 @@ struct Timer timer_5s = {
   &TIMER2_TAILR_R, &TIMER2_RIS_R, &TIMER2_ICR_R
 };
 
+// Constants for the button locations in terms of
+// the coordinates returned by Touch_Read functions
 const int center_x_pwr = 1300;
 const int center_x_ped = 1780;
 const int center_y = 780;
 
-/**
- * Header to fill
- */
+// Calculates the Euclidean distance between two coordinates
 float dist(int x1, int x2, int y1, int y2);
 
 int main() {
   freq = PRESET2;               // 60 MHz
   PLL_Init(freq);               // Set system clock frequency to 60 MHz
 
+  // Initialie LCD screen and LCD touch functionality
   LCD_Init();
   Touch_Init();
-  
+
+  // Draw the power button
   LCD_DrawFilledCircle(105, 200, 30, Color4[5]);
   LCD_SetCursor(95, 195);
   LCD_PrintString("pwr");
-  
+  // Draw the pedestrian button
   LCD_DrawFilledCircle(215, 200, 30, Color4[5]);
   LCD_SetCursor(205, 195);
   LCD_PrintString("ped");
@@ -84,13 +88,13 @@ int main() {
   init(timer_5s);
   TIMER2_IMR_R |= 0x1;    // Enable interrupt on time-out
   NVIC_EN0_R |= 0x800000; // Enable interrupt number 23
-  
+
+  // Initialize LEDs
   off(red);
   off(ylw);
   off(grn);
 
   state = Off;
-  
   unsigned long x, y;
 
   while (1) {
@@ -132,9 +136,6 @@ float dist(int x1, int x2, int y1, int y2) {
 #pragma call_graph_root = "interrupt"
 __weak void Timer0A_Handler ( void ) {
   // Power was just held for 2 seconds
-  // Reset interrupt status (start counting again)
-  //reset(timer_pwr);
-  
   if (state == Off) {
     // System was just turned on, start 5-second timer
     enable(timer_5s);
@@ -160,8 +161,6 @@ __weak void Timer0A_Handler ( void ) {
 #pragma call_graph_root = "interrupt"
 __weak void Timer1A_Handler ( void ) {
   // Pedestrian button was just held for 2 seconds
-  // Reset interrupt status (start counting again)
-  //reset(timer_ped);   
   if (state == Go) {
     tick_traffic(&state, 0, 1, red, ylw, grn);
   }
@@ -183,6 +182,8 @@ __weak void Timer1A_Handler ( void ) {
 __weak void Timer2A_Handler ( void ) {
   // Reset 5-second timer
   reset(timer_5s);
+
+  // Reset pedestrian timer so edge cases between Stop and Go are consistent
   if (isEnabled(timer_ped)) {
     disable(timer_ped);
     init(timer_ped);

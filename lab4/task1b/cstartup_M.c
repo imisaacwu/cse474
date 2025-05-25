@@ -1,7 +1,7 @@
 /**
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
- * May 15, 2025
+ * May 25, 2025
  * Interrupt Vector Table for Task 1b
  */
 
@@ -119,7 +119,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  PortJ_Handler,
+  PortJ_Handler,                          // Port J
   0,
   0,
   0,
