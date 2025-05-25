@@ -3,7 +3,11 @@
  * 2169931, 2360957
  * May 25, 2025
  * EE/CSE 474: Lab4 Task2a implements a traffic light
- * controller system using virtual LEDs and buttons on a LCD screen
+ * controller system using virtual LEDs and buttons on a LCD screen.
+ * Users can hold down the power button to trigger the system on, starting
+ * at the red light. Time-outs will trigger the system to go between green
+ * and red. At the green light, users can press the pedestrian button to
+ * trigger the yellow light before going to the red light.
  */
 
 #include <stdio.h>
