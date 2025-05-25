@@ -133,7 +133,7 @@ float dist(int x1, int x2, int y1, int y2) {
 __weak void Timer0A_Handler ( void ) {
   // Power was just held for 2 seconds
   // Reset interrupt status (start counting again)
-  reset(timer_pwr);
+  //reset(timer_pwr);
   
   if (state == Off) {
     // System was just turned on, start 5-second timer
@@ -161,7 +161,7 @@ __weak void Timer0A_Handler ( void ) {
 __weak void Timer1A_Handler ( void ) {
   // Pedestrian button was just held for 2 seconds
   // Reset interrupt status (start counting again)
-  reset(timer_ped);   
+  //reset(timer_ped);   
   if (state == Go) {
     tick_traffic(&state, 0, 1, red, ylw, grn);
   }
