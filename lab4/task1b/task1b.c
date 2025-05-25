@@ -20,21 +20,23 @@ enum frequency freq;
 void config_ports();
 
 int main(void) {
-  // Select system clock frequency preset
   config_ports();
-  LCD_Init();
 
+  // Select system clock frequency preset
   freq = PRESET2;               // 60 MHz
   PLL_Init(freq);               // Set system clock frequency to 60 MHz
   ADCReadTemp_Init();           // Initialize ADC0 to read from the temperature sensor
   TimerADCTriger_Init();        // Initialize Timer0A to trigger ADC0
-  
+
+  // Initialize LCD screen
+  LCD_Init();
   float temp_C, temp_F;
   
   while(1) {
     // Calculate temperature from the read ADC Value
     temp_C = 147.5 - ((75 * (VREFP - VREFN) * ADC_value) / 4096);
     temp_F = (temp_C * (9.0/5.0)) + 32;
+    // Print readings to the screen
     LCD_Printf("The current temperature is %f C, %f F.\n", temp_C, temp_F);
     LCD_Printf("The current clock frequency is %d MHz.\n", (int) freq);
   }
