@@ -2,9 +2,8 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * May 25, 2025
- * Main file for Task 2a
- * Implements a traffic light controller system
- * using virtual LEDs and buttons on the LCD screen
+ * EE/CSE 474: Lab4 Task2a implements a traffic light
+ * controller system using virtual LEDs and buttons on a LCD screen
  */
 
 #include <stdio.h>

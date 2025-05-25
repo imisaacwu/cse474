@@ -2,7 +2,9 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * May 25, 2025
- * EE/CSE 474: Lab4 Task 1b print to LCD
+ * EE/CSE 474: Lab4 Task1b prints temperature readings
+ * from an internal temperature sensor to an external
+ * LCD screen.
  */
 
 #include <stdint.h>
