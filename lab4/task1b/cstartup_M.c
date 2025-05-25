@@ -119,7 +119,7 @@ const intvec_elem __vector_table[] =
   0,
   0,
   0,
-  PortJ_Handler,
+  PortJ_Handler,                          // Port J
   0,
   0,
   0,
