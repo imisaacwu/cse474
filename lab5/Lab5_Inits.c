@@ -160,5 +160,15 @@ void PWM_Init(void) {
   delay++;
   delay++;
   
-  
+  GPIOAFSEL(F) |= 0x2;  // Set PF1 to alternate function
+  GPIOPCTL(F) = 0x60;   // Set it to M0PMW1
+  PWMCC |= 0x100;       // Set PWM to use divide and set to divide by 2 (30 MHz)
+  PWM0CTL = 0x0;
+  // Drive pwmB low when it hits comparator
+  // Else, drive high when we hit the load (stay high while we approach comparator)
+  PWM0GENB = 0x80C;   
+  PWM0LOAD = 1199;
+  PWM0CMPB = 299;      // Set duty cycle to 75% (comparator value)
+  PWM0CTL = 0x1;       // Start timer
+  PWMENABLE |= 0x2;    // Enable PWM outputs for M0PMW1
 }

@@ -20,6 +20,7 @@ int main(void) {
   LEDBreadboard_Init();         // Initialize the 4 onboard LEDs (GPIO)
   ADCReadPot_Init();            // Initialize ADC0 to read from the potentiometer
   TimerADCTriger_Init();        // Initialize Timer0A to trigger ADC0
+  PWM_Init();
   float resistance;
 
   while(1) {
