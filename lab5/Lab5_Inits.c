@@ -161,7 +161,11 @@ void PWM_Init(void) {
   delay++;
   
   GPIOAFSEL(F) |= 0x2;  // Set PF1 to alternate function
-  GPIOPCTL(F) = 0x60;   // Set it to M0PMW1
+  GPIOPCTL(F) &= ~0xF0; // Clear M0PMW1 port control
+  GPIOPCTL(F) |= 0x60;  // Set it to M0PMW1
+  GPIODIR(F) |= 0x2;    // Set PF1 as output
+  GPIODEN(F) |= 0x2;    // Enable digital function on PF1
+  
   PWMCC |= 0x100;       // Set PWM to use divide and set to divide by 2 (30 MHz)
   PWM0CTL = 0x0;
   // Drive pwmB low when it hits comparator

@@ -103,16 +103,12 @@
 #define UART_3_BASE    0x4000F000
 
 // Registers for PWM
-#define PWMENABLE        (*((volatile uint32_t *) 0x40028008))
+#define PWMENABLE       (*((volatile uint32_t *) 0x40028008))
 #define PWM0CTL         (*((volatile uint32_t *) 0x40028040))
 #define PWM0LOAD        (*((volatile uint32_t *) 0x40028050))
 #define PWM0GENB        (*((volatile uint32_t *) 0x40028064))
 #define PWM0CMPB        (*((volatile uint32_t *) 0x4002805C))
-
 #define PWMCC           (*((volatile uint32_t *) 0x40028FC8))
-
-// PWM Bases
-#define PWM_0_ BASE    0x40028064
 
 // Registers for the NVIC
 #define NVIC_EN0    (*((volatile uint32_t *) 0xE000E100))

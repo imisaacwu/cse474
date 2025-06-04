@@ -27,6 +27,10 @@ int main(void) {
     // 5.1: Convert ADC_value to resistance in kilo-ohm
     resistance = ADC_value / 409.5;
 
+    PWM0CTL = 0x0;
+    PWM0CMPB = (int) ((resistance / 10) * 1199);
+    PWM0CTL = 0x1;       // Start timer
+
     // 5.2: Change the pattern of LEDs based on the resistance
     if (resistance < 5) {
       GPIODATA(C) &= ~0x10;     // Set LED C4 to 0 (off)
