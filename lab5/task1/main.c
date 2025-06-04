@@ -2,9 +2,10 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * June 5, 2025
- * EE/CSE 474: Lab5 Task1 controls LEDS D1-D4 using an
- * external potentiometer. Increasing the resistance (kΩ),
- * up to 10kΩ, will result in more LEDs being turned on.
+ * EE/CSE 474: Lab5 Task1 controls an external LED using an
+ * external potentiometer. Users can increase the resistance, which
+ * brightens the external LED. Conversely, then can decrease the 
+ * resistance to dim the LED.
  */
 
 #include <stdint.h>
@@ -17,26 +18,21 @@ int main(void) {
   // Select system clock frequency preset
   enum frequency freq = PRESET2; // 60 MHz
   PLL_Init(freq);               // Set system clock frequency to 60 MHz
-  LEDBreadboard_Init();         // Initialize the 4 onboard LEDs (GPIO)
   ADCReadPot_Init();            // Initialize ADC0 to read from the potentiometer
   TimerADCTriger_Init();        // Initialize Timer0A to trigger ADC0
-  PWM_Init();
+  PWM_Init();                   // Initialize M0PWM1        
   float resistance;
+  int cmp;
 
   while(1) {
-    // 5.1: Convert ADC_value to resistance in kilo-ohm
+    // Convert ADC_value to resistance in kilo-ohm
     resistance = ADC_value / 409.5;
+    // Convert resistance to comparator value
+    cmp = (int) ((resistance / 10) * 2300) + 50;
 
     PWM0CTL = 0x0;
-    PWM0CMPB = (int) ((resistance / 10) * 1199);
+    PWM0CMPB = cmp;
     PWM0CTL = 0x1;       // Start timer
-
-    // 5.2: Change the pattern of LEDs based on the resistance
-    if (resistance < 5) {
-      GPIODATA(C) &= ~0x10;     // Set LED C4 to 0 (off)
-    } else {
-      GPIODATA(C) |= 0x10;      // Set LED C4 to 1 (on)
-    }
   }
   return 0;
 }

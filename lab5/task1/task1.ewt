@@ -2320,7 +2320,7 @@
         <name>$PROJ_DIR$\..\Lab5_Inits.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\Lab5_Task1.c</name>
+        <name>$PROJ_DIR$\main.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\..\timer.c</name>

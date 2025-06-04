@@ -79,20 +79,6 @@ void LEDOnboard_Init(void) {
   GPIODATA(N) &= ~0x3;       // Set PN0 and PN1 to 0 (off)
 }
 
-void LEDBreadboard_Init(void) {
-  // Confgiure GPIO pins to output to LEDs on our breadboard.
-  volatile unsigned short delay = 0;
-  RCGCGPIO |= 0x4;              // Enable port C
-  delay++;
-  delay++;
-  
-  // Configure Port C for LEDs
-  GPIOAMSEL(C) &= ~0x10;        // Disable analog function of PC4
-  GPIODIR(C) |= 0x10;           // Set PC4 to output
-  GPIOAFSEL(C) &= ~0x10;        // Set PC4 regular port function
-  GPIODEN(C) |= 0x10;           // Enable digital output on PC4
-}
-
 void ADCReadPot_Init(void) {
   // STEP 2: Initialize ADC0 SS3.
   // 2.1: Enable the ADC0 clock
@@ -144,7 +130,7 @@ void TimerADCTriger_Init(void) {
   delay++;
   
   struct Timer timer = {
-    0, TIMER_PERIODIC, 1 * CLK_FRQ,
+    0, TIMER_PERIODIC, 0.1 * CLK_FRQ,
     &GPTMCTL(0), &GPTMCFG(0), &GPTMTAMR(0), &GPTMTAILR(0), &GPTMRIS(0), &GPTMICR(0)
   };
   init(timer);
@@ -166,13 +152,13 @@ void PWM_Init(void) {
   GPIODIR(F) |= 0x2;    // Set PF1 as output
   GPIODEN(F) |= 0x2;    // Enable digital function on PF1
   
-  PWMCC |= 0x100;       // Set PWM to use divide and set to divide by 2 (30 MHz)
+  PWMCC |= 0x000;       // Set PWM to system clock
   PWM0CTL = 0x0;
   // Drive pwmB low when it hits comparator
   // Else, drive high when we hit the load (stay high while we approach comparator)
   PWM0GENB = 0x80C;   
-  PWM0LOAD = 1199;
-  PWM0CMPB = 299;      // Set duty cycle to 75% (comparator value)
+  PWM0LOAD = 2399;
+  PWM0CMPB = 599;      // Set duty cycle to 75% (comparator value)
   PWM0CTL = 0x1;       // Start timer
   PWMENABLE |= 0x2;    // Enable PWM outputs for M0PMW1
 }

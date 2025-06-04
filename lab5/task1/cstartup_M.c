@@ -2,7 +2,7 @@
  * Richie Doan, Isaac Wu
  * 2169931, 2360957
  * June 5, 2025
- * Interrupt Vector Table for Task 1
+ * Interrupt Vector Table for Lab5
  */
 
 /**************************************************
