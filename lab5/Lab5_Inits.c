@@ -8,7 +8,6 @@
 #include "PLL_Header.h"
 #include "Lab5_Inits.h"
 
-// STEP 0a: Include your header file here
 // YOUR CUSTOM HEADER FILE HERE
 #include "lab5.h"
 #include "timer.h"
@@ -61,8 +60,7 @@ int PLL_Init(enum frequency freq) {
 }
 
 void LEDOnboard_Init(void) {
-  // STEP 1: Initialize the 4 on board LEDs by initializing the corresponding
-  // GPIO pins.
+  // Initialize the 4 on board LEDs by initializing the corresponding GPIO pins.
 
   volatile unsigned short delay = 0;
   RCGCGPIO |= 0x1020;       // Enable ports N and F
@@ -80,7 +78,7 @@ void LEDOnboard_Init(void) {
 }
 
 void ADCReadPot_Init(void) {
-  // STEP 2: Initialize ADC0 SS3.
+  // Initialize ADC0 SS3.
   // 2.1: Enable the ADC0 clock
   volatile unsigned short delay = 0;
   RCGCADC |= 0x1;
@@ -123,7 +121,7 @@ void ADCReadPot_Init(void) {
 }
 
 void TimerADCTriger_Init(void) {
-  // Initialize Timer0A to trigger ADC0 at 1 HZ.
+  // Initialize Timer0A to trigger ADC0 at 10 HZ.
   volatile unsigned short delay = 0;
   RCGCTIMER |= 0x1;     // Enable Timer 0
   delay++;
@@ -147,18 +145,17 @@ void PWM_Init(void) {
   delay++;
   
   GPIOAFSEL(F) |= 0x2;  // Set PF1 to alternate function
-  GPIOPCTL(F) &= ~0xF0; // Clear M0PMW1 port control
-  GPIOPCTL(F) |= 0x60;  // Set it to M0PMW1
+  GPIOPCTL(F) &= ~0xF0; // Clear M0PWM1 port control
+  GPIOPCTL(F) |= 0x60;  // Set it to M0PWM1
   GPIODIR(F) |= 0x2;    // Set PF1 as output
   GPIODEN(F) |= 0x2;    // Enable digital function on PF1
   
   PWMCC |= 0x000;       // Set PWM to system clock
-  PWM0CTL = 0x0;
   // Drive pwmB low when it hits comparator
   // Else, drive high when we hit the load (stay high while we approach comparator)
   PWM0GENB = 0x80C;   
-  PWM0LOAD = 2399;
-  PWM0CMPB = 599;      // Set duty cycle to 75% (comparator value)
-  PWM0CTL = 0x1;       // Start timer
-  PWMENABLE |= 0x2;    // Enable PWM outputs for M0PMW1
+  PWM0LOAD = 2399;      // Set Load value for 25 kHz (60,000,000 / 25,000) - 1
+  PWM0CMPB = 599;       // Set duty cycle to 75% (comparator value)
+  PWM0CTL = 0x1;        // Start timer
+  PWMENABLE |= 0x2;     // Enable PWM outputs for M0PWM1
 }

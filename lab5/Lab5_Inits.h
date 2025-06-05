@@ -38,6 +38,7 @@ void ADCReadTemp_Init(void);
 void TimerADCTriger_Init(void);
 
 // Initializes PWM for use with LEDs.
+// Configures M0PWM1 at 25 kHz at an initial 75% duty cycle
 void PWM_Init(void);
 
 #endif  // _Lab5_Inits_H_

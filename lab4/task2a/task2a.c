@@ -62,7 +62,7 @@ int main() {
   freq = PRESET2;               // 60 MHz
   PLL_Init(freq);               // Set system clock frequency to 60 MHz
 
-  // Initialie LCD screen and LCD touch functionality
+  // Initialize LCD screen and LCD touch functionality
   LCD_Init();
   Touch_Init();
 

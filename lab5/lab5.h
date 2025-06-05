@@ -13,7 +13,6 @@
 // Main Clock Gating Control Registers
 #define RCGCTIMER   (*((volatile uint32_t *) 0x400FE604))
 #define RCGCGPIO    (*((volatile uint32_t *) 0x400FE608))
-#define RCGCUART    (*((volatile uint32_t *) 0x400FE618))
 #define RCGCADC     (*((volatile uint32_t *) 0x400FE638))
 #define RCGCPWM     (*((volatile uint32_t *) 0x400FE640))
 
@@ -88,19 +87,6 @@
 #define ADCSSEMUX3_0    (*((volatile uint32_t *) 0x400380B8))
 #define ADCSSTSH3_0     (*((volatile uint32_t *) 0x400380BC))
 #define ADCCC_0         (*((volatile uint32_t *) 0x40038FC8))
-
-// Registers for UART
-#define UARTDR(X)       (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x000)))
-#define UARTFR(X)       (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x018)))
-#define UARTIBRD(X)     (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x024)))
-#define UARTFBRD(X)     (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x028)))
-#define UARTLCRH(X)     (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x02C)))
-#define UARTCTL(X)      (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0x030)))
-#define UARTCC(X)       (*((volatile uint32_t *) (UART_ ## X ## _BASE + 0xFC8)))
-
-// UART Bases
-#define UART_0_BASE    0x4000C000
-#define UART_3_BASE    0x4000F000
 
 // Registers for PWM
 #define PWMENABLE       (*((volatile uint32_t *) 0x40028008))

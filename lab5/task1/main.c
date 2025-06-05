@@ -4,7 +4,7 @@
  * June 5, 2025
  * EE/CSE 474: Lab5 Task1 controls an external LED using an
  * external potentiometer. Users can increase the resistance, which
- * brightens the external LED. Conversely, then can decrease the 
+ * brightens the external LED and they can decrease the 
  * resistance to dim the LED.
  */
 
